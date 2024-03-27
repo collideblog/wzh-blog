@@ -1,0 +1,123 @@
+footer:
+  framework: Framework
+  theme: Theme
+
+copy:
+  success: Copy Successful
+  error: Copy Error
+  noSupport: Browser Not Supported
+
+page:
+  articles: Articles
+  tag: Tag
+  category: Category
+  archives: Archives
+
+card_post_count: comments
+
+no_title: Untitled
+
+post:
+  created: Created
+  updated: Updated
+  wordcount: Word Count
+  min2read: Reading Time
+  min2read_unit: mins
+  page_pv: Post Views
+  comments: Comments
+  copyright:
+    author: 文章作者
+    link: 文章链接
+    copyright_notice: 版权声明
+    copyright_content: '本博客所有文章除特别声明外，文章版权均归wzh所有，转载请注明来自 <a href="%s" target="_blank">%s</a>！'
+  recommend: Related Articles
+  edit: Edited on
+
+search:
+  title: Search
+  load_data: Loading the Database
+  algolia_search:
+    input_placeholder: Search for Posts
+    hits_empty: "We didn't find any results for the search: ${query}."
+    hits_stats: '${hits} results found in ${time} ms'
+
+  local_search:
+    input_placeholder: Search for Posts
+    hits_empty: "We didn't find any results for the search: ${query}"
+    hits_stats: '${hits} results found'
+
+pagination:
+  prev: Previous
+  next: Next
+
+comment: Comment
+
+aside:
+  articles: Articles
+  tags: Tags
+  categories: Categories
+  card_announcement: 公告
+  card_categories: Categories
+  card_tags: Tags
+  card_archives: 归档
+  card_recent_post: 最近文章
+  card_webinfo:
+    headline: 网站资讯
+    article_name: 文章数
+    runtime:
+      name: 网站已运行时间
+      unit: 天
+    last_push_date:
+      name: 最近更新时间
+    site_wordcount: 本站总字数
+    site_uv_name: 本站访客数
+    site_pv_name: 本站总访问量
+  more_button: View More
+  card_newest_comments:
+    headline: Latest Comments
+    loading_text: loading...
+    error: Unable to retrieve comments, please check the configuration
+    zero: No comments
+    image: image
+    link: link
+    code: code
+  card_toc: Contents
+  card_post_series: Series
+
+date_suffix:
+  just: Just now
+  min: minutes ago
+  hour: hours ago
+  day: days ago
+  month: months ago
+
+donate: Sponsor
+share: Share
+
+rightside:
+  readmode_title: Read Mode
+  translate_title: Toggle Between Traditional Chinese And Simplified Chinese
+  night_mode_title: Toggle Between Light And Dark Mode
+  back_to_top: Back To Top
+  toc: Table Of Contents
+  scroll_to_comment: Scroll To Comments
+  setting: Setting
+  aside: Toggle between Single-column and Double-column
+  chat: Chat
+
+copy_copyright:
+  author: Author
+  link: Link
+  source: Source
+  info: Copyright is owned by the author. For commercial reprints, please contact the author for authorization. For non-commercial reprints, please indicate the source.
+
+Snackbar:
+  chs_to_cht: You have switched to Traditional Chinese
+  cht_to_chs: You have switched to Simplified Chinese
+  day_to_night: You have switched to Dark Mode
+  night_to_day: You have switched to Light Mode
+
+loading: Loading...
+load_more: Load More
+
+error404: Page Not Found
