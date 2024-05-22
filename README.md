@@ -94,3 +94,8 @@ bug：这里对于`_config.butterfly`配置项里的`inject`里的`head`标签�
 
 添加博客背景彩带，修改博客侧边栏一些基础模块展示，等等。
 设置锚点，文章过期提醒等等（过期时长是一年）
+
+### **butterfly-config-v1.7**
+
+更换了pandoc作为博客渲染引擎，即就是安装了`hexo-renderer-pandoc`插件，支持数学公式的渲染了。
+创建了`/source/js`文件夹，用于存放后续js相关代码，这次创建了一个`mathjax_config.js`文件来存放mathjax的相关配置，可以在`_config.butterfly.yml`文件里的`inject`字段进行引用，但是这里我虽然创建了`mathjax_config.js`文件，但没有引用，后续要引用即可在`inject`字段里添加引用这个js代码，但是要记得搭配jsdelivr或unpkg等CDN引用(已写好)。

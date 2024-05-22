@@ -103,3 +103,17 @@ theme: butterfly
 ## Docs: https://hexo.io/docs/one-command-deployment
 deploy:
   type: ''
+
+
+pandoc:
+  args:
+    - '-f'
+    - 'commonmark_x'
+    - '-t'
+    - 'html'
+    - '--mathjax'
+  extensions:
+    - '-implicit_figures'
+  noNumbered: true
+
+  

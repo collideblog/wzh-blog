@@ -343,8 +343,9 @@ rightside_item_order:
 
 # MathJax
 mathjax:
-  enable: false
-  per_page: false
+  enable: true
+  per_page: true
+
 
 # KaTeX
 katex:
@@ -910,6 +911,12 @@ css_prefix: true
 inject:
   head:
     # - <link rel="stylesheet" href="/xxx.css">
+    # 下面两行是用于MathJax配置的
+    # - <script defer src="/js/mathjax_config.js"></script>
+    # - <script type="text/javascript" id="MathJax-script" defer src="https://unpkg.com/mathjax@3/es5/tex-chtml.js"></script>
+
+
+    # 下面四行是用于配置live2d模型的
     - <script src = "/live2d-test-demo/bundle2.js"></script>
     - <link rel="stylesheet" href="/live2d-test-demo/live2d/css/live2d.css" />
     - <script src="https://unpkg.com/core-js-bundle@3.6.1/minified.js"></script>

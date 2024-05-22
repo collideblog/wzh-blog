@@ -1,13 +1,13 @@
-<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>梯度下降法（一） | wzh's blog</title><meta name="author" content="wzh"><meta name="copyright" content="wzh"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="梯度下降法（一）一、梯度下降的基本思想​	咱们先从一个故事开始，话说有三个兄弟被困在了浓雾弥漫的山上，渴得要死，他们的目标是看谁能尽快到山谷中找到水源，由于大雾能见度极，难以确定下山的路径，只能一点点探路决定前进的方向。 ​	老大非常谨慎，全方位观察，综合比较后才选择最陡的方向； ​	老二随性胆大，随机探一处就朝较低处走去； ​	老三比较普通，没有大哥小心翼翼，也没有二哥大大咧咧，而是探测几下就走">
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>梯度下降法（一） | wzh's blog</title><meta name="author" content="wzh"><meta name="copyright" content="wzh"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="梯度下降法（一） 一、梯度下降的基本思想 ​ 咱们先从一个故事开始，话说有三个兄弟被困在了浓雾弥漫的山上，渴得要死，他们的目标是看谁能尽快到山谷中找到水源，由于大雾能见度极，难以确定下山的路径，只能一点点探路决定前进的方向。 ​ 老大非常谨慎，全方位观察，综合比较后才选择最陡的方向； ​ 老二随性胆大，随机探一处就朝较低处走去； ​ 老三比较普通，没有大哥小心翼翼，也没有二哥大大咧咧">
 <meta property="og:type" content="article">
 <meta property="og:title" content="梯度下降法（一）">
 <meta property="og:url" content="https://blog.wuzih.top/2024/05/19/%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D%E6%B3%95(%E4%B8%80)/index.html">
 <meta property="og:site_name" content="wzh&#39;s blog">
-<meta property="og:description" content="梯度下降法（一）一、梯度下降的基本思想​	咱们先从一个故事开始，话说有三个兄弟被困在了浓雾弥漫的山上，渴得要死，他们的目标是看谁能尽快到山谷中找到水源，由于大雾能见度极，难以确定下山的路径，只能一点点探路决定前进的方向。 ​	老大非常谨慎，全方位观察，综合比较后才选择最陡的方向； ​	老二随性胆大，随机探一处就朝较低处走去； ​	老三比较普通，没有大哥小心翼翼，也没有二哥大大咧咧，而是探测几下就走">
+<meta property="og:description" content="梯度下降法（一） 一、梯度下降的基本思想 ​ 咱们先从一个故事开始，话说有三个兄弟被困在了浓雾弥漫的山上，渴得要死，他们的目标是看谁能尽快到山谷中找到水源，由于大雾能见度极，难以确定下山的路径，只能一点点探路决定前进的方向。 ​ 老大非常谨慎，全方位观察，综合比较后才选择最陡的方向； ​ 老二随性胆大，随机探一处就朝较低处走去； ​ 老三比较普通，没有大哥小心翼翼，也没有二哥大大咧咧">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://img2.baidu.com/it/u=551125832,420285419&fm=253&fmt=auto&app=138&f=JPEG?w=889&h=500">
 <meta property="article:published_time" content="2024-05-18T16:00:00.000Z">
-<meta property="article:modified_time" content="2024-05-19T15:19:52.368Z">
+<meta property="article:modified_time" content="2024-05-22T16:36:22.915Z">
 <meta property="article:author" content="wzh">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://img2.baidu.com/it/u=551125832,420285419&fm=253&fmt=auto&app=138&f=JPEG?w=889&h=500"><link rel="shortcut icon" href="/img/avatar.jpg"><link rel="canonical" href="https://blog.wuzih.top/2024/05/19/%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D%E6%B3%95(%E4%B8%80)/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
@@ -55,7 +55,7 @@
   isHome: false,
   isHighlightShrink: true,
   isToc: true,
-  postUpdate: '2024-05-19 23:19:52'
+  postUpdate: '2024-05-23 00:36:22'
 }</script><script>(win=>{
       win.saveToLocal = {
         set: (key, value, ttl) => {
@@ -173,13 +173,19 @@
     document.addEventListener('pjax:send', () => { preloader.initLoading() })
     document.addEventListener('pjax:complete', () => { preloader.endLoading() })
   }
-})()</script><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/avatar.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">4</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">0</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page group hide" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 列表</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></li><li><a class="site-page child" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></li></ul></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://img2.baidu.com/it/u=551125832,420285419&amp;fm=253&amp;fmt=auto&amp;app=138&amp;f=JPEG?w=889&amp;h=500')"><nav id="nav"><span id="blog-info"><a href="/" title="wzh's blog"><span class="site-name">wzh's blog</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page group hide" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 列表</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></li><li><a class="site-page child" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></li></ul></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">梯度下降法（一）</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2024-05-18T16:00:00.000Z" title="Created 2024-05-19 00:00:00">2024-05-19</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2024-05-19T15:19:52.368Z" title="Updated 2024-05-19 23:19:52">2024-05-19</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="梯度下降法（一）"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post Views:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="梯度下降法（一）"><a href="#梯度下降法（一）" class="headerlink" title="梯度下降法（一）"></a>梯度下降法（一）</h1><h2 id="一、梯度下降的基本思想"><a href="#一、梯度下降的基本思想" class="headerlink" title="一、梯度下降的基本思想"></a>一、梯度下降的基本思想</h2><p>​	咱们先从一个故事开始，话说有三个兄弟被困在了浓雾弥漫的山上，渴得要死，他们的目标是看谁能尽快到山谷中找到水源，由于大雾能见度极，难以确定下山的路径，只能一点点探路决定前进的方向。</p>
-<p>​	老大非常谨慎，全方位观察，综合比较后才选择最陡的方向；</p>
-<p>​	老二随性胆大，随机探一处就朝较低处走去；</p>
-<p>​	老三比较普通，没有大哥小心翼翼，也没有二哥大大咧咧，而是探测几下就走最陡峭的方向。</p>
+})()</script><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/avatar.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">4</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">0</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page group hide" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 列表</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></li><li><a class="site-page child" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></li></ul></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://img2.baidu.com/it/u=551125832,420285419&amp;fm=253&amp;fmt=auto&amp;app=138&amp;f=JPEG?w=889&amp;h=500')"><nav id="nav"><span id="blog-info"><a href="/" title="wzh's blog"><span class="site-name">wzh's blog</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page group hide" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 列表</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></li><li><a class="site-page child" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></li></ul></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">梯度下降法（一）</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2024-05-18T16:00:00.000Z" title="Created 2024-05-19 00:00:00">2024-05-19</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2024-05-22T16:36:22.915Z" title="Updated 2024-05-23 00:36:22">2024-05-23</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="梯度下降法（一）"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post Views:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="梯度下降法一">梯度下降法（一）</h1>
+<h2 id="一梯度下降的基本思想">一、梯度下降的基本思想</h2>
+<p>​
+咱们先从一个故事开始，话说有三个兄弟被困在了浓雾弥漫的山上，渴得要死，他们的目标是看谁能尽快到山谷中找到水源，由于大雾能见度极，难以确定下山的路径，只能一点点探路决定前进的方向。</p>
+<p>​ 老大非常谨慎，全方位观察，综合比较后才选择最陡的方向；</p>
+<p>​ 老二随性胆大，随机探一处就朝较低处走去；</p>
+<p>​
+老三比较普通，没有大哥小心翼翼，也没有二哥大大咧咧，而是探测几下就走最陡峭的方向。</p>
 <p>你觉得谁最有可能先到山脚找到水源呢？</p>
 <p>三兄弟下山找水的过程都用到了梯度下降的思想，每走一段路测量出当前最陡的方向，然后向前重复这个过程，就能成功抵达山谷。在这个故事中，大山代表了什么，又该如何确定梯度呢？</p>
-<h2 id="二、梯度下降的主要原理"><a href="#二、梯度下降的主要原理" class="headerlink" title="二、梯度下降的主要原理"></a>二、梯度下降的主要原理</h2><h4 id="1、确定一个小目标——-预测函数"><a href="#1、确定一个小目标——-预测函数" class="headerlink" title="1、确定一个小目标——-预测函数"></a>1、确定一个小目标——-预测函数</h4><p>（ps：也叫目标函数）</p>
+<h2 id="二梯度下降的主要原理">二、梯度下降的主要原理</h2>
+<h4 id="1确定一个小目标预测函数">1、确定一个小目标—––预测函数</h4>
+<p>（ps：也叫目标函数）</p>
 <p>机器学习的一个常见任务，就是通过学习算法，然后自动发现数据背后的规律，进而不断改进模型，然后做出预测。</p>
 <blockquote>
 <ul>
@@ -192,43 +198,88 @@
 <p>为便于理解，我们举一个简单的例子：</p>
 <p>在二维直角坐标系中，有一群样本点，横纵坐标分别代表一组有因果关系的变量，比如房子的价格和面积，人的身高和步幅等等。常识告诉我们，它们的分布是正比例的，也就是一条过圆点的直线。</p>
 <p>我们的任务就是设计一个算法，让机器能够拟合这些数据，帮助我们算出直线的参数w。</p>
-<p>一个简单的办法就是先随机选一条<strong>过圆点的直线</strong>(这里只是假设最简单的情况)，然后计算所有样本点和它的偏离程度，再根据误差大小来调整直线的斜率w。在这个问题中直线y&#x3D;wx，就是所谓的预测函数。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/collidepicgo/image/Gradient-Descent-note1/%E5%8A%A8%E7%94%BB%20(1).gif" alt="动画%20(1)"></p>
-<h4 id="2、找到差距——-代价函数"><a href="#2、找到差距——-代价函数" class="headerlink" title="2、找到差距——-代价函数"></a>2、找到差距——-代价函数</h4><p>（ps：一般情况也叫损失函数，但其实严格上，代价函数和损失函数有一些区别，具体可看最后的参考链接。）</p>
+<p>一个简单的办法就是先随机选一条<strong>过圆点的直线</strong>(这里只是假设最简单的情况)，然后计算所有样本点和它的偏离程度，再根据误差大小来调整直线的斜率w。在这个问题中直线y=wx，就是所谓的预测函数。</p>
+<p><img
+src="https://cdn.jsdelivr.net/gh/collidepicgo/image/Gradient-Descent-note1/动画%20(1).gif"
+alt="动画" /></p>
+<h4 id="2找到差距代价函数">2、找到差距—––代价函数</h4>
+<p>（ps：一般情况也叫损失函数，但其实严格上，代价函数和损失函数有一些区别，具体可看最后的参考链接。）</p>
 <p>原理我们知道了，如何让计算机实现呢，首先我们需要量化数据的偏离程度，也就是<strong>误差</strong>。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/collidepicgo/image/Gradient-Descent-note1/image-20240518153713899.png" alt="image-20240518153713899"></p>
+<p><img
+src="https://cdn.jsdelivr.net/gh/collidepicgo/image/Gradient-Descent-note1/image-20240518153713899.png"
+alt="image-20240518153713899" /></p>
 <p>最常见的方法是<strong>均方误差</strong>，顾名思义，就是误差平方和的平均值。</p>
 <p>我们先看一个点P1，它的坐标是（X1，Y1）， 对应的误差是e1。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/collidepicgo/image/Gradient-Descent-note1/image-20240518153423509.png" alt="image-20240518153423509"></p>
-<p>它等于这个点的真值Y1与预测值w乘X1的差的平方：<br>$$<br>e_1&#x3D;(y_1-w<em>x_1)^2<br>$$<br>用完全平方公式展开就是这样：<br>$$<br>e_1&#x3D;x_1^2</em>w^2-2(x_1<em>y_1)<em>w+y_1^2<br>$$<br>同理点P2，P3一直到PN的误差E2，E3，一直到EN也都是一样的形式：<br>$$<br>e_{1}&#x3D;x_1^2</em>w^2-2(x_1</em>y_1)<em>w+y_1^2\e_{2}&#x3D;x_2^2</em>w^2-2(x_2<em>y_2)<em>w+y_2^2\e_{3}&#x3D;x_3^2</em>w^2-2(x_3</em>y_3)<em>w+y_3^2\…\e_{n}&#x3D;x_n^2</em>w^2-2(x_n*y_n)*w+y_n^2<br>$$<br>我们的目的是求所有点误差的平均值，考虑到x，y和样本数n都是未知数，因此通过合并同类项，然后用常量a，b，c分别代替不同项的系数</p>
+<p><img
+src="https://cdn.jsdelivr.net/gh/collidepicgo/image/Gradient-Descent-note1/image-20240518153423509.png"
+alt="image-20240518153423509" /></p>
+<p>它等于这个点的真值Y1与预测值w乘X1的差的平方： <span
+class="math display">\[
+e_1=(y_1-w*x_1)^2
+\]</span> 用完全平方公式展开就是这样： <span class="math display">\[
+e_1=x_1^2*w^2-2(x_1*y_1)*w+y_1^2
+\]</span>
+同理点P2，P3一直到PN的误差E2，E3，一直到EN也都是一样的形式：</p>
+<p><span class="math display">\[\begin{gathered}
+e_{1} =x_1^2*w^2-2(x_1*y_1)*w+y_1^2 \\
+e_{2} =x_2^2*w^2-2(x_2*y_2)*w+y_2^2 \\
+e_{3} =x_3^2*w^2-2(x_3*y_3)*w+y_3^2 \\
+... \\
+e_{n} =x_n^2*w^2-2(x_n*y_n)*w+y_n^2
+\end{gathered}
+\]</span></p>
+<p>我们的目的是求所有点误差的平均值，考虑到x，y和样本数n都是未知数，因此通过合并同类项，然后用常量a，b，c分别代替不同项的系数</p>
 <p>我们可以大大简化最终的式子，如此以来，就得到了一个高中学过的一元二次函数：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/collidepicgo/image/Gradient-Descent-note1/image-20240518154215165.png" alt="image-20240518154215165"></p>
-<p>我们也可以把前面的1&#x2F;n放进去一起设为参数，这个误差函数表示了学习所需要付出的代价，因此常常被称为代价函数。<br>$$<br>e&#x3D;a<em>w^2+b</em>w+c<br>$$<br>当w的取值发生变化时，直线绕圆点旋转，对应到抛物线图像，就是取值点沿着曲线的运动：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/collidepicgo/image/Gradient-Descent-note1/%E5%8A%A8%E7%94%BB%20(2).gif" alt="动画%20(2)"></p>
+<p><img
+src="https://cdn.jsdelivr.net/gh/collidepicgo/image/Gradient-Descent-note1/image-20240518154215165.png"
+alt="image-20240518154215165" /></p>
+<p>我们也可以把前面的1/n放进去一起设为参数，这个误差函数表示了学习所需要付出的代价，因此常常被称为代价函数。
+<span class="math display">\[
+e=a*w^2+b*w+c
+\]</span>
+当w的取值发生变化时，直线绕圆点旋转，对应到抛物线图像，就是取值点沿着曲线的运动：</p>
+<p><img
+src="https://cdn.jsdelivr.net/gh/collidepicgo/image/Gradient-Descent-note1/动画%20(2).gif"
+alt="动画%20(2)" /></p>
 <p>通过定义预测函数，然后根据误差公式推导代价函数，我们成功地将样本点拟合过程映射到了一个函数图像上。</p>
-<h4 id="3、明确搜索方向——-梯度计算"><a href="#3、明确搜索方向——-梯度计算" class="headerlink" title="3、明确搜索方向——-梯度计算"></a>3、明确搜索方向——-梯度计算</h4><p>找到了代价函数图像，我们该怎么走呢？</p>
+<h4 id="3明确搜索方向梯度计算">3、明确搜索方向—––梯度计算</h4>
+<p>找到了代价函数图像，我们该怎么走呢？</p>
 <p>机器学习的目标是拟合出最接近训练数据分布的直线，也就是找到使得误差代价最小的参数w，对应在代价函数图像上就是它的最低点。</p>
 <p>这个寻找最低点的过程，就是梯度下降要干的活</p>
 <p>假定起始点在曲线上任意一处，直觉告诉我们，只要选择向陡峭程度最大的方向走，就能更快到达最低点。这个陡峭长度就是梯度，英文是Gradient，它是代价函数的导数，对抛物线而言，就是曲线斜率。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/collidepicgo/image/Gradient-Descent-note1/image-20240518180649012.png" alt="image-20240518180649012"></p>
-<h4 id="4、大胆的往前走吗——-学习率"><a href="#4、大胆的往前走吗——-学习率" class="headerlink" title="4、大胆的往前走吗——-学习率"></a>4、大胆的往前走吗——-学习率</h4><p>确定方向以后，就要前进了，但步子该迈多大呢？</p>
+<p><img
+src="https://cdn.jsdelivr.net/gh/collidepicgo/image/Gradient-Descent-note1/image-20240518180649012.png"
+alt="image-20240518180649012" /></p>
+<h4 id="4大胆的往前走吗学习率">4、大胆的往前走吗—––学习率</h4>
+<p>确定方向以后，就要前进了，但步子该迈多大呢？</p>
 <p>假如随便选一个数，比如0.1，那么算法的效果是这样的，可以看到它一直在最低点附近震荡，难以收敛：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/collidepicgo/image/Gradient-Descent-note1/%E5%8A%A8%E7%94%BB%20(3).gif" alt="动画%20(3)"></p>
+<p><img
+src="https://cdn.jsdelivr.net/gh/collidepicgo/image/Gradient-Descent-note1/动画%20(3).gif"
+alt="动画%20(3)" /></p>
 <p>那如果直接用斜率值作为步长怎么样？</p>
 <p>离最低点远时，斜率大，可以快速收敛；</p>
 <p>离最低点近时，斜率越小，收敛的就越精准。</p>
 <p>听上去不错的点子：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/collidepicgo/image/Gradient-Descent-note1/%E5%8A%A8%E7%94%BB%20(4).gif" alt="动画%20(4)"></p>
+<p><img
+src="https://cdn.jsdelivr.net/gh/collidepicgo/image/Gradient-Descent-note1/动画%20(4).gif"
+alt="动画%20(4)" /></p>
 <p>可是实际效果却是左右反复横跳（甚至还越来越往上跳），依然无法收敛到最小值：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/collidepicgo/image/Gradient-Descent-note1/%E5%8A%A8%E7%94%BB%20(5).gif" alt="动画%20(5)"></p>
+<p><img
+src="https://cdn.jsdelivr.net/gh/collidepicgo/image/Gradient-Descent-note1/动画%20(5).gif"
+alt="动画%20(5)" /></p>
 <p>原因是一下步子迈的太大，往上跳是因为我们是设置斜率越大步子越大，导致甚至会往上跳动。</p>
 <p>我们把斜率缩小试试，我们让斜率乘以一个非常小的值，比如0.01，再来看看效果：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/collidepicgo/image/Gradient-Descent-note1/%E5%8A%A8%E7%94%BB%20(6).gif" alt="动画%20(6)"></p>
+<p><img
+src="https://cdn.jsdelivr.net/gh/collidepicgo/image/Gradient-Descent-note1/动画%20(6).gif"
+alt="动画%20(6)" /></p>
 <p>可以看到现在下降得如此顺滑，这个很小的值有一个好听的名字，叫做“学习率”。</p>
-<p>通过学习调整权重参数w的方式就是：<br>$$<br>新w&#x3D;旧w-斜率*\boxed{学习率}<br>$$</p>
-<h4 id="5、不达目标不罢休——-循环迭代"><a href="#5、不达目标不罢休——-循环迭代" class="headerlink" title="5、不达目标不罢休——-循环迭代"></a>5、不达目标不罢休——-循环迭代</h4><p>总结起来，梯度下降法的完整过程，包括</p>
+<p>通过学习调整权重参数w的方式就是： <span class="math display">\[
+新w=旧w-斜率*\boxed{学习率}
+\]</span></p>
+<h4 id="5不达目标不罢休循环迭代">5、不达目标不罢休—––循环迭代</h4>
+<p>总结起来，梯度下降法的完整过程，包括</p>
 <blockquote>
-<ol>
+<ol type="1">
 <li>定义代价函数</li>
 <li>选择起始点</li>
 <li>计算梯度</li>
@@ -239,62 +290,145 @@
 <p>这个流程就是所谓的梯度下降算法。</p>
 <p><strong>代价函数、起始点、梯度、学习率</strong></p>
 <p>这些都是梯度下降法的核心要素，也是后来各种算法改进的重要方向</p>
-<h2 id="三、实际情况没有这么简单"><a href="#三、实际情况没有这么简单" class="headerlink" title="三、实际情况没有这么简单"></a>三、实际情况没有这么简单</h2><p>看到这里，你可能会有些疑问，</p>
+<h2 id="三实际情况没有这么简单">三、实际情况没有这么简单</h2>
+<p>看到这里，你可能会有些疑问，</p>
 <p>既然都知道了代价函数就是一个一元二次的抛物线，为什么不用数学手段直接求解呢？</p>
 <p>这种求最大值最小值的问题，不是中学数学常见题型吗？</p>
 <p>这是因为实际问题中，序列样本的分布千奇百怪，代价函数也可能千变万化，基本上不太可能是一条简单的抛物线。</p>
-<p>比如我们的<strong>预测函数</strong>稍作改动，变成 <strong>y&#x3D;wx+b</strong> ，那么<strong>代价函数</strong>就变成了误差e，关于两个参数w和b的曲面（在梯度下降法(二)的笔记中我会举一个例子）：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/collidepicgo/image/Gradient-Descent-note1/image-20240518183056546.png" alt="image-20240518183056546"></p>
+<p>比如我们的<strong>预测函数</strong>稍作改动，变成
+<strong>y=wx+b</strong>
+，那么<strong>代价函数</strong>就变成了误差e，关于两个参数w和b的曲面（在梯度下降法(二)的笔记中我会举一个例子）：</p>
+<p><img
+src="https://cdn.jsdelivr.net/gh/collidepicgo/image/Gradient-Descent-note1/image-20240518183056546.png"
+alt="image-20240518183056546" /></p>
 <p>但这依然是比较简单的情形，因为只有一个最小点。</p>
 <p>此外，代价函数还可能会是一条波浪线，当有多个最小点存在时，机器学习的<strong>理想目标</strong>将是找到最低的那个，也就是所谓的全局最优，而不是局部最优。（梯度下降只能在代价函数是凸函数的情况下才可以找到全局最优，但实际情况大概率都不是凸函数，那既然梯度下降既然不能找到全局最优，为什么还应用广泛，后面笔记我们再进行讨论。）</p>
-<p><img src="https://cdn.jsdelivr.net/gh/collidepicgo/image/Gradient-Descent-note1/%E5%8A%A8%E7%94%BB%20(7).gif" alt="动画%20(7)"></p>
+<p><img
+src="https://cdn.jsdelivr.net/gh/collidepicgo/image/Gradient-Descent-note1/动画%20(7).gif"
+alt="动画%20(7)" /></p>
 <p>代价函数也可能会是一个起伏不定的曲面，也就是一个二元函数，同样可以用梯度下降来找到二元函数的全局最小值（凸函数）或者局部极小值</p>
-<p><img src="https://cdn.jsdelivr.net/gh/collidepicgo/image/Gradient-Descent-note1/%E5%8A%A8%E7%94%BB%20(8).gif" alt="动画%20(8)"></p>
+<p><img
+src="https://cdn.jsdelivr.net/gh/collidepicgo/image/Gradient-Descent-note1/动画%20(8).gif"
+alt="动画%20(8)" /></p>
 <p>又或者某种无法用三维图像描述的更复杂的函数。例如房价，除了和面积相关外，还和城市、地段、朝向、政策等等各种因素相关，这个问题当中，代价函数变成十维百维都有可能，将很难可视化的展示出来，<strong>但无论有多少维度，都可以通过梯度下降法来寻找误差最小的点（凸函数情况下）。</strong></p>
-<h2 id="四、梯度下降法的各种变体"><a href="#四、梯度下降法的各种变体" class="headerlink" title="四、梯度下降法的各种变体"></a>四、梯度下降法的各种变体</h2><p>现在回到我们最初的问题，三个兄弟到底谁更有可能先找到水源呢？</p>
+<h2 id="四梯度下降法的各种变体">四、梯度下降法的各种变体</h2>
+<p>现在回到我们最初的问题，三个兄弟到底谁更有可能先找到水源呢？</p>
 <p>实际上他们分别代表了三种不同类型的梯度下降算法：</p>
 <blockquote>
 <ul>
-<li>批量梯度下降法—-BGD</li>
-<li>随机梯度下降法—-SGD</li>
-<li>小批量梯度下降法—-MBGD</li>
+<li>批量梯度下降法––BGD</li>
+<li>随机梯度下降法––SGD</li>
+<li>小批量梯度下降法––MBGD</li>
 </ul>
 </blockquote>
 <p>大哥小心翼翼，每次都把四周探测的明明白白的，他的做法就像批量梯度下降法，简称BGD，它的下降过程就像这样</p>
 <p>左侧是样本点，右侧是用等高线表示的代价函数曲面，可以看到，它的运算是用<strong>全部训练样本参与计算</strong>。梯度下降的非常平稳，走出了一条强迫症一般的漂亮曲线。它是梯度下降最原始的形式。好处是能够保证算法的精准度，找到全局最优解(前提是代价函数是凸函数)。但却让训练搜索过程变得很慢，代价很大。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/collidepicgo/image/Gradient-Descent-note1/image-20240519013222176.png" alt="image-20240519013222176"></p>
+<p><img
+src="https://cdn.jsdelivr.net/gh/collidepicgo/image/Gradient-Descent-note1/image-20240519013222176.png"
+alt="image-20240519013222176" /></p>
 <p>老二大大咧咧，随便探测一下就走的做法，就像随机梯度下降法，简称SGD。它的下降过程顾名思义，非常随性。<strong>每下降一步，只需用一个样本进行计算</strong>，它的行进路线就像个醉汉，深一脚浅一脚的前进。虽然<strong>大方向没错</strong>，但下降的非常不平稳，它的好处是提升了计算的速度。但是却牺牲了一定的精准度。（但是该方法反而在实际情况中用的比BGD多）</p>
-<p><img src="https://cdn.jsdelivr.net/gh/collidepicgo/image/Gradient-Descent-note1/%E5%8A%A8%E7%94%BB%20(9).gif" alt="动画%20(9)"></p>
+<p><img
+src="https://cdn.jsdelivr.net/gh/collidepicgo/image/Gradient-Descent-note1/动画%20(9).gif"
+alt="动画%20(9)" /></p>
 <p>老三结合了老大老二的优点，虽然没有像老大把四周探测的明明白白的，但是也没有像老二随机试探一处，而是多试探几下再走，这种方法叫做小批量梯度下降法，简称MBGD。（这个方法还有个别名，叫<strong>最速下降法</strong>，从名字看就可见一斑）<strong>每下降一步，选用一小批样本参与计算</strong>。它的下降过程虽然没有大哥平稳有规律，但是快的多；虽然没有二哥速度快，但准确了很多。走出了一条简洁高效的路线。（这种方法在深度学习中用的是最多的，既能保证准确率，同时速率也不慢）（通常在之前会把样本按设置的批次大小，进行划分，然后每次更新选取其中一个批次的样本，而且通常设置让其每次选取的批次不一样）</p>
-<p><img src="https://cdn.jsdelivr.net/gh/collidepicgo/image/Gradient-Descent-note1/%E5%8A%A8%E7%94%BB%20(10).gif" alt="动画%20(10)"></p>
+<p><img
+src="https://cdn.jsdelivr.net/gh/collidepicgo/image/Gradient-Descent-note1/动画%20(10).gif"
+alt="动画%20(10)" /></p>
 <p>梯度下降法简单有效，适用范围广，但也并非完美无缺。比如前面讲过，它对学习率的设定非常敏感。</p>
 <p>学习率太大，可能会反复横跳，找不到最低点；学习率太小，又会浪费很多的计算量。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/collidepicgo/image/Gradient-Descent-note1/%E5%8A%A8%E7%94%BB%20(11).gif" alt="动画%20(11)"></p>
-<h2 id="五、梯度下降的算法调优"><a href="#五、梯度下降的算法调优" class="headerlink" title="五、梯度下降的算法调优"></a>五、梯度下降的算法调优</h2><p>在使用梯度下降时，需要进行调优。哪些地方需要调优呢？</p>
-<ol>
-<li><strong>算法的步长选择。</strong>在前面的算法描述中，我取的步长只是举例子，但是实际上取值取决于数据样本，可以多取一些值，从大到小，分别运行算法，看看迭代效果，如果损失函数在变小，说明取值有效，否则要增大步长。前面说了。步长太大，会导致迭代过快，甚至有可能错过最优解。步长太小，迭代速度太慢，很长时间算法都不能结束。所以算法的步长需要多次运行后才能得到一个较为优的值。</li>
-<li><strong>算法参数的初始值选择。</strong> 初始值不同，获得的最小值也有可能不同，因为多数情况，损失函数不是一个凸函数，并且可能有多个局部极小值，因此梯度下降求得的很大概率只是局部最小值。由于有局部最优解的风险，需要多次用不同初始值运行算法，比较损失函数的最小值，选择损失函数最小化的初值。</li>
-<li><strong>归一化。</strong>如果不归一化，会收敛得比较慢，典型的情况就是出现“之”字型的收敛路径。因为如果不同特征的数值范围差异很大，梯度下降在优化时可能需要花费更多的迭代次数来找到最优解。归一化后，特征值范围相似，优化路径更加平滑，有助于<strong>加速收敛</strong>；同时归一化还可以<strong>减少数值不稳定性</strong>（在浮点数计算中，大范围的特征值可能导致数值不稳定，影响优化算法的效果。归一化可以减少这种风险）；归一化还可以<strong>提高模型性能</strong>（一些模型（如SVM、KNN等）对特征尺度敏感，归一化有助于提高这些模型的性能。）这里举一个归一化的例子，例如在特征值服从正态分布的情况下，可以对于每个特征x，求出它的期望和标准差std(x)，然后转化为$$\frac{x-\overline{x}}{std(x)}$$，这样特征的新期望为0，新方差为1，迭代次数可以大大加快，当然还有更多的归一化方法，这里不做叙述。</li>
+<p><img
+src="https://cdn.jsdelivr.net/gh/collidepicgo/image/Gradient-Descent-note1/动画%20(11).gif"
+alt="动画%20(11)" /></p>
+<h2 id="五梯度下降的算法调优">五、梯度下降的算法调优</h2>
+<p>在使用梯度下降时，需要进行调优。哪些地方需要调优呢？</p>
+<ol type="1">
+<li><strong>算法的步长选择。</strong>
+在前面的算法描述中，我取的步长只是举例子，但是实际上取值取决于数据样本，可以多取一些值，从大到小，分别运行算法，看看迭代效果，如果损失函数在变小，说明取值有效，否则要增大步长。前面说了。步长太大，会导致迭代过快，甚至有可能错过最优解。步长太小，迭代速度太慢，很长时间算法都不能结束。所以算法的步长需要多次运行后才能得到一个较为优的值。</li>
+<li><strong>算法参数的初始值选择。</strong>
+初始值不同，获得的最小值也有可能不同，因为多数情况，损失函数不是一个凸函数，并且可能有多个局部极小值，因此梯度下降求得的很大概率只是局部最小值。由于有局部最优解的风险，需要多次用不同初始值运行算法，比较损失函数的最小值，选择损失函数最小化的初值。</li>
+<li><strong>归一化。</strong>
+如果不归一化，会收敛得比较慢，典型的情况就是出现“之”字型的收敛路径。因为如果不同特征的数值范围差异很大，梯度下降在优化时可能需要花费更多的迭代次数来找到最优解。归一化后，特征值范围相似，优化路径更加平滑，有助于<strong>加速收敛</strong>；同时归一化还可以<strong>减少数值不稳定性</strong>（在浮点数计算中，大范围的特征值可能导致数值不稳定，影响优化算法的效果。归一化可以减少这种风险）；归一化还可以<strong>提高模型性能</strong>（一些模型（如SVM、KNN等）对特征尺度敏感，归一化有助于提高这些模型的性能。）这里举一个归一化的例子，例如在特征值服从正态分布的情况下，可以对于每个特征x，求出它的期望和标准差std(x)，然后转化为<span
+class="math inline">\(\frac{x-\overline{x}}{std(x)}\)</span>，这样特征的新期望为0，新方差为1，迭代次数可以大大加快，当然还有更多的归一化方法，这里不做叙述。</li>
 </ol>
-<h2 id="六、更优的下山方法"><a href="#六、更优的下山方法" class="headerlink" title="六、更优的下山方法"></a>六、更优的下山方法</h2><p>动态调节学习率的AdaGrad，经常更新的参数学习率就小一些，不常更新的学习率大一些，这种方法的一个问题是频繁更新参数的学习率有可能会过小，以致逐渐消失。因此，就出现了解决这一问题的RMSProp算法，以及更高级的，不需要设置学习率的AdaDelta算法，还有融合了Momentum和RMSProp算法的Adam算法。而Momentum算法在下降过程中充分考虑前一阶段下降的“惯性”，这个方法的路线有点像滚下山的样子。此外还有更复杂的FTRL等方法。这些艰深的内容，不是这个笔记的重点，后续如果有研究再更新。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/collidepicgo/image/Gradient-Descent-note1/image-20240519023854638.png" alt="image-20240519023854638"></p>
-<h2 id="在梯度下降法-二-笔记会讲："><a href="#在梯度下降法-二-笔记会讲：" class="headerlink" title="在梯度下降法(二)笔记会讲："></a>在梯度下降法(二)笔记会讲：</h2><ul>
-<li>在这里我们只是举了一个最简单的例子（一个参数w，因为假设它过原点了，只有斜率参数），在下个笔记我们再举一个二维的例子，直线<strong>y&#x3D;wx+b</strong>，那么损失函数就是一个二维的曲面。</li>
+<h2 id="六更优的下山方法">六、更优的下山方法</h2>
+<p>动态调节学习率的AdaGrad，经常更新的参数学习率就小一些，不常更新的学习率大一些，这种方法的一个问题是频繁更新参数的学习率有可能会过小，以致逐渐消失。因此，就出现了解决这一问题的RMSProp算法，以及更高级的，不需要设置学习率的AdaDelta算法，还有融合了Momentum和RMSProp算法的Adam算法。而Momentum算法在下降过程中充分考虑前一阶段下降的“惯性”，这个方法的路线有点像滚下山的样子。此外还有更复杂的FTRL等方法。这些艰深的内容，不是这个笔记的重点，后续如果有研究再更新。</p>
+<p><img
+src="https://cdn.jsdelivr.net/gh/collidepicgo/image/Gradient-Descent-note1/image-20240519023854638.png"
+alt="image-20240519023854638" /></p>
+<h2 id="在梯度下降法二笔记会讲">在梯度下降法(二)笔记会讲：</h2>
+<ul>
+<li>在这里我们只是举了一个最简单的例子（一个参数w，因为假设它过原点了，只有斜率参数），在下个笔记我们再举一个二维的例子，直线<strong>y=wx+b</strong>，那么损失函数就是一个二维的曲面。</li>
 <li>对于最优问题，凸函数，以及鞍点的一些情况的一些简单理解和介绍。</li>
 <li>在实际应用中的一些情况，以及各种下山方法的介绍。</li>
 <li>三种方法的伪代码。</li>
 </ul>
-<h2 id="参考："><a href="#参考：" class="headerlink" title="参考："></a>参考：</h2><p><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV18P4y1j7uH/?spm_id_from=333.1007.top_right_bar_window_history.content.click&vd_source=81721fd274a00c7af0771239e273a016">[梯度下降]3D可视化讲解通俗易懂</a></p>
-<p><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1oY411N7Xz/?spm_id_from=333.337.search-card.all.click&vd_source=81721fd274a00c7af0771239e273a016">[5分钟深度学习] #01 梯度下降算法</a></p>
-<p><a target="_blank" rel="noopener" href="https://www.zhihu.com/question/264189719/answer/291167114">如何理解随机梯度下降（stochastic gradient descent，SGD）</a></p>
-<p><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1FZ4y1V7jY/?spm_id_from=333.337.search-card.all.click&vd_source=81721fd274a00c7af0771239e273a016">梯度下降法不能收敛到全局最优，但应用广泛</a></p>
-<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/113714840">什么是梯度下降 - 知乎 (zhihu.com)</a></p>
-<p><a target="_blank" rel="noopener" href="https://www.zhihu.com/question/57747902/answer/3464786510">梯度下降的参数更新公式是如何确定的？ - 知乎 (zhihu.com)</a></p>
-<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/Christina-Notebook/p/10111516.html">最优化问题——梯度下降法 - Christina_笔记 - 博客园 (cnblogs.com)</a></p>
-<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/104546744#:~:text=%E5%88%9D%E5%A7%8B%E5%80%BC%EF%BC%9A%E5%BD%93%E6%8D%9F%E5%A4%B1%E5%87%BD,%E9%83%A8%E6%9C%80%E4%BC%98%E8%A7%A3%E4%B9%8B%E9%97%B4%E6%AF%94%E8%BE%83">机器学习必知必会：梯度下降法 - 知乎 (zhihu.com)</a></p>
-<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/No_Game_No_Life_/article/details/89844430">One PUNCH Man——梯度下降和全局最优_梯度下降法如何寻找全局最优解-CSDN博客</a></p>
-<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/330126934">代价函数，损失函数，目标函数区别 - 知乎 (zhihu.com)</a></p>
+<h2 id="参考">参考：</h2>
+<p><a
+target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV18P4y1j7uH/?spm_id_from=333.1007.top_right_bar_window_history.content.click&amp;vd_source=81721fd274a00c7af0771239e273a016">[梯度下降]3D可视化讲解通俗易懂</a></p>
+<p><a
+target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1oY411N7Xz/?spm_id_from=333.337.search-card.all.click&amp;vd_source=81721fd274a00c7af0771239e273a016">[5分钟深度学习]
+#01 梯度下降算法</a></p>
+<p><a
+target="_blank" rel="noopener" href="https://www.zhihu.com/question/264189719/answer/291167114">如何理解随机梯度下降（stochastic
+gradient descent，SGD）</a></p>
+<p><a
+target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1FZ4y1V7jY/?spm_id_from=333.337.search-card.all.click&amp;vd_source=81721fd274a00c7af0771239e273a016">梯度下降法不能收敛到全局最优，但应用广泛</a></p>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/113714840">什么是梯度下降 -
+知乎 (zhihu.com)</a></p>
+<p><a
+target="_blank" rel="noopener" href="https://www.zhihu.com/question/57747902/answer/3464786510">梯度下降的参数更新公式是如何确定的？
+- 知乎 (zhihu.com)</a></p>
+<p><a
+target="_blank" rel="noopener" href="https://www.cnblogs.com/Christina-Notebook/p/10111516.html">最优化问题——梯度下降法
+- Christina_笔记 - 博客园 (cnblogs.com)</a></p>
+<p><a
+target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/104546744#:~:text=初始值：当损失函,部最优解之间比较">机器学习必知必会：梯度下降法
+- 知乎 (zhihu.com)</a></p>
+<p><a
+target="_blank" rel="noopener" href="https://blog.csdn.net/No_Game_No_Life_/article/details/89844430">One
+PUNCH
+Man——梯度下降和全局最优_梯度下降法如何寻找全局最优解-CSDN博客</a></p>
+<p><a
+target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/330126934">代价函数，损失函数，目标函数区别
+- 知乎 (zhihu.com)</a></p>
 <p>一些数学证明和方法改进：</p>
-<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/655863926">优化基本理论与方法（16）随机方法之一</a></p>
-<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/656267555">优化基本理论与方法（17）随机方法之二</a></p>
-</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://blog.wuzih.top">wzh</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://blog.wuzih.top/2024/05/19/%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D%E6%B3%95(%E4%B8%80)/">https://blog.wuzih.top/2024/05/19/%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D%E6%B3%95(%E4%B8%80)/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，文章版权均归wzh所有，转载请注明来自 <a href="https://blog.wuzih.top" target="_blank">wzh's blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"></div><div class="post_share"><div class="social-share" data-image="https://img2.baidu.com/it/u=551125832,420285419&amp;fm=253&amp;fmt=auto&amp;app=138&amp;f=JPEG?w=889&amp;h=500" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-full"><a href="/2023/12/25/%E5%B9%BF%E6%92%AD%E5%AE%9E%E9%AA%8C/" title="广播网络实验"><img class="cover" src="https://img2.baidu.com/it/u=551125832,420285419&amp;fm=253&amp;fmt=auto&amp;app=138&amp;f=JPEG?w=889&amp;h=500" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">Previous</div><div class="prev_info">广播网络实验</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">wzh</div><div class="author-info__description">记录学习生活，欢迎访问！</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">4</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">0</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/wuzi0/wzh-blog"><i class="fab fa-github"></i><span>关注</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/wuzi0/wzh-blog" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="https://mail.qq.com/" target="_blank" title="Email:secret@qq.com"><i class="fas fa-envelope" style="color: #24292e;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">不定时更新</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Contents</span><span class="toc-percentage"></span></div><div class="toc-content is-expand"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D%E6%B3%95%EF%BC%88%E4%B8%80%EF%BC%89"><span class="toc-text">梯度下降法（一）</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%80%9D%E6%83%B3"><span class="toc-text">一、梯度下降的基本思想</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D%E7%9A%84%E4%B8%BB%E8%A6%81%E5%8E%9F%E7%90%86"><span class="toc-text">二、梯度下降的主要原理</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1%E3%80%81%E7%A1%AE%E5%AE%9A%E4%B8%80%E4%B8%AA%E5%B0%8F%E7%9B%AE%E6%A0%87%E2%80%94%E2%80%94-%E9%A2%84%E6%B5%8B%E5%87%BD%E6%95%B0"><span class="toc-text">1、确定一个小目标——-预测函数</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2%E3%80%81%E6%89%BE%E5%88%B0%E5%B7%AE%E8%B7%9D%E2%80%94%E2%80%94-%E4%BB%A3%E4%BB%B7%E5%87%BD%E6%95%B0"><span class="toc-text">2、找到差距——-代价函数</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3%E3%80%81%E6%98%8E%E7%A1%AE%E6%90%9C%E7%B4%A2%E6%96%B9%E5%90%91%E2%80%94%E2%80%94-%E6%A2%AF%E5%BA%A6%E8%AE%A1%E7%AE%97"><span class="toc-text">3、明确搜索方向——-梯度计算</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4%E3%80%81%E5%A4%A7%E8%83%86%E7%9A%84%E5%BE%80%E5%89%8D%E8%B5%B0%E5%90%97%E2%80%94%E2%80%94-%E5%AD%A6%E4%B9%A0%E7%8E%87"><span class="toc-text">4、大胆的往前走吗——-学习率</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5%E3%80%81%E4%B8%8D%E8%BE%BE%E7%9B%AE%E6%A0%87%E4%B8%8D%E7%BD%A2%E4%BC%91%E2%80%94%E2%80%94-%E5%BE%AA%E7%8E%AF%E8%BF%AD%E4%BB%A3"><span class="toc-text">5、不达目标不罢休——-循环迭代</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E5%AE%9E%E9%99%85%E6%83%85%E5%86%B5%E6%B2%A1%E6%9C%89%E8%BF%99%E4%B9%88%E7%AE%80%E5%8D%95"><span class="toc-text">三、实际情况没有这么简单</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D%E6%B3%95%E7%9A%84%E5%90%84%E7%A7%8D%E5%8F%98%E4%BD%93"><span class="toc-text">四、梯度下降法的各种变体</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%94%E3%80%81%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D%E7%9A%84%E7%AE%97%E6%B3%95%E8%B0%83%E4%BC%98"><span class="toc-text">五、梯度下降的算法调优</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%AD%E3%80%81%E6%9B%B4%E4%BC%98%E7%9A%84%E4%B8%8B%E5%B1%B1%E6%96%B9%E6%B3%95"><span class="toc-text">六、更优的下山方法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9C%A8%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D%E6%B3%95-%E4%BA%8C-%E7%AC%94%E8%AE%B0%E4%BC%9A%E8%AE%B2%EF%BC%9A"><span class="toc-text">在梯度下降法(二)笔记会讲：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%82%E8%80%83%EF%BC%9A"><span class="toc-text">参考：</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最近文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2024/05/19/%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D%E6%B3%95(%E4%B8%80)/" title="梯度下降法（一）"><img src="https://img2.baidu.com/it/u=551125832,420285419&amp;fm=253&amp;fmt=auto&amp;app=138&amp;f=JPEG?w=889&amp;h=500" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="梯度下降法（一）"/></a><div class="content"><a class="title" href="/2024/05/19/%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D%E6%B3%95(%E4%B8%80)/" title="梯度下降法（一）">梯度下降法（一）</a><time datetime="2024-05-18T16:00:00.000Z" title="Created 2024-05-19 00:00:00">2024-05-19</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/12/25/%E5%B9%BF%E6%92%AD%E5%AE%9E%E9%AA%8C/" title="广播网络实验"><img src="https://img2.baidu.com/it/u=551125832,420285419&amp;fm=253&amp;fmt=auto&amp;app=138&amp;f=JPEG?w=889&amp;h=500" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="广播网络实验"/></a><div class="content"><a class="title" href="/2023/12/25/%E5%B9%BF%E6%92%AD%E5%AE%9E%E9%AA%8C/" title="广播网络实验">广播网络实验</a><time datetime="2023-12-24T16:00:00.000Z" title="Created 2023-12-25 00:00:00">2023-12-25</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/11/27/python%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B02/" title="Python课程笔记(二)"><img src="https://img2.baidu.com/it/u=551125832,420285419&amp;fm=253&amp;fmt=auto&amp;app=138&amp;f=JPEG?w=889&amp;h=500" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Python课程笔记(二)"/></a><div class="content"><a class="title" href="/2023/11/27/python%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B02/" title="Python课程笔记(二)">Python课程笔记(二)</a><time datetime="2023-11-26T16:00:00.000Z" title="Created 2023-11-27 00:00:00">2023-11-27</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/11/15/python%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B01/" title="Python课程笔记(一)"><img src="https://img2.baidu.com/it/u=551125832,420285419&amp;fm=253&amp;fmt=auto&amp;app=138&amp;f=JPEG?w=889&amp;h=500" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Python课程笔记(一)"/></a><div class="content"><a class="title" href="/2023/11/15/python%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B01/" title="Python课程笔记(一)">Python课程笔记(一)</a><time datetime="2023-11-14T16:00:00.000Z" title="Created 2023-11-15 00:00:00">2023-11-15</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2023 - 2024 By wzh</div><div class="footer_custom_text">Hi, welcome to my <a target="_blank" rel="noopener" href="https://butterfly.js.org/">blog</a>!<br>好好生活</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Read Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light And Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Setting"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table Of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back To Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"></div><div id="landlord"> <div class="message" style="opacity:0"></div> <canvas id="live2d" width="220" height="360" class="live2d"></canvas><div class="hide-button">隐藏</div></div><script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script><script type="text/javascript" src="/live2d-test-demo/live2d/js/message.js"></script><script type="text/javascript" src="/live2d-test-demo/extra_hexo.js"></script><script defer="defer" id="ribbon" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-ribbon.min.js" size="150" alpha="0.6" zIndex="-1" mobile="false" data-click="true"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
+<p><a
+target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/655863926">优化基本理论与方法（16）随机方法之一</a></p>
+<p><a
+target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/656267555">优化基本理论与方法（17）随机方法之二</a></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://blog.wuzih.top">wzh</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://blog.wuzih.top/2024/05/19/%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D%E6%B3%95(%E4%B8%80)/">https://blog.wuzih.top/2024/05/19/%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D%E6%B3%95(%E4%B8%80)/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，文章版权均归wzh所有，转载请注明来自 <a href="https://blog.wuzih.top" target="_blank">wzh's blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"></div><div class="post_share"><div class="social-share" data-image="https://img2.baidu.com/it/u=551125832,420285419&amp;fm=253&amp;fmt=auto&amp;app=138&amp;f=JPEG?w=889&amp;h=500" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-full"><a href="/2023/12/25/%E5%B9%BF%E6%92%AD%E5%AE%9E%E9%AA%8C/" title="广播网络实验"><img class="cover" src="https://img2.baidu.com/it/u=551125832,420285419&amp;fm=253&amp;fmt=auto&amp;app=138&amp;f=JPEG?w=889&amp;h=500" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">Previous</div><div class="prev_info">广播网络实验</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">wzh</div><div class="author-info__description">记录学习生活，欢迎访问！</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">4</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">0</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/wuzi0/wzh-blog"><i class="fab fa-github"></i><span>关注</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/wuzi0/wzh-blog" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="https://mail.qq.com/" target="_blank" title="Email:secret@qq.com"><i class="fas fa-envelope" style="color: #24292e;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">不定时更新</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Contents</span><span class="toc-percentage"></span></div><div class="toc-content is-expand"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D%E6%B3%95%E4%B8%80"><span class="toc-text">梯度下降法（一）</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%80%9D%E6%83%B3"><span class="toc-text">一、梯度下降的基本思想</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D%E7%9A%84%E4%B8%BB%E8%A6%81%E5%8E%9F%E7%90%86"><span class="toc-text">二、梯度下降的主要原理</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1%E7%A1%AE%E5%AE%9A%E4%B8%80%E4%B8%AA%E5%B0%8F%E7%9B%AE%E6%A0%87%E9%A2%84%E6%B5%8B%E5%87%BD%E6%95%B0"><span class="toc-text">1、确定一个小目标—––预测函数</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2%E6%89%BE%E5%88%B0%E5%B7%AE%E8%B7%9D%E4%BB%A3%E4%BB%B7%E5%87%BD%E6%95%B0"><span class="toc-text">2、找到差距—––代价函数</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3%E6%98%8E%E7%A1%AE%E6%90%9C%E7%B4%A2%E6%96%B9%E5%90%91%E6%A2%AF%E5%BA%A6%E8%AE%A1%E7%AE%97"><span class="toc-text">3、明确搜索方向—––梯度计算</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4%E5%A4%A7%E8%83%86%E7%9A%84%E5%BE%80%E5%89%8D%E8%B5%B0%E5%90%97%E5%AD%A6%E4%B9%A0%E7%8E%87"><span class="toc-text">4、大胆的往前走吗—––学习率</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5%E4%B8%8D%E8%BE%BE%E7%9B%AE%E6%A0%87%E4%B8%8D%E7%BD%A2%E4%BC%91%E5%BE%AA%E7%8E%AF%E8%BF%AD%E4%BB%A3"><span class="toc-text">5、不达目标不罢休—––循环迭代</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E5%AE%9E%E9%99%85%E6%83%85%E5%86%B5%E6%B2%A1%E6%9C%89%E8%BF%99%E4%B9%88%E7%AE%80%E5%8D%95"><span class="toc-text">三、实际情况没有这么简单</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D%E6%B3%95%E7%9A%84%E5%90%84%E7%A7%8D%E5%8F%98%E4%BD%93"><span class="toc-text">四、梯度下降法的各种变体</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%94%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D%E7%9A%84%E7%AE%97%E6%B3%95%E8%B0%83%E4%BC%98"><span class="toc-text">五、梯度下降的算法调优</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%AD%E6%9B%B4%E4%BC%98%E7%9A%84%E4%B8%8B%E5%B1%B1%E6%96%B9%E6%B3%95"><span class="toc-text">六、更优的下山方法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9C%A8%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D%E6%B3%95%E4%BA%8C%E7%AC%94%E8%AE%B0%E4%BC%9A%E8%AE%B2"><span class="toc-text">在梯度下降法(二)笔记会讲：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%82%E8%80%83"><span class="toc-text">参考：</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最近文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2024/05/19/%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D%E6%B3%95(%E4%B8%80)/" title="梯度下降法（一）"><img src="https://img2.baidu.com/it/u=551125832,420285419&amp;fm=253&amp;fmt=auto&amp;app=138&amp;f=JPEG?w=889&amp;h=500" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="梯度下降法（一）"/></a><div class="content"><a class="title" href="/2024/05/19/%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D%E6%B3%95(%E4%B8%80)/" title="梯度下降法（一）">梯度下降法（一）</a><time datetime="2024-05-18T16:00:00.000Z" title="Created 2024-05-19 00:00:00">2024-05-19</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/12/25/%E5%B9%BF%E6%92%AD%E5%AE%9E%E9%AA%8C/" title="广播网络实验"><img src="https://img2.baidu.com/it/u=551125832,420285419&amp;fm=253&amp;fmt=auto&amp;app=138&amp;f=JPEG?w=889&amp;h=500" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="广播网络实验"/></a><div class="content"><a class="title" href="/2023/12/25/%E5%B9%BF%E6%92%AD%E5%AE%9E%E9%AA%8C/" title="广播网络实验">广播网络实验</a><time datetime="2023-12-24T16:00:00.000Z" title="Created 2023-12-25 00:00:00">2023-12-25</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/11/27/python%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B02/" title="Python课程笔记(二)"><img src="https://img2.baidu.com/it/u=551125832,420285419&amp;fm=253&amp;fmt=auto&amp;app=138&amp;f=JPEG?w=889&amp;h=500" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Python课程笔记(二)"/></a><div class="content"><a class="title" href="/2023/11/27/python%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B02/" title="Python课程笔记(二)">Python课程笔记(二)</a><time datetime="2023-11-26T16:00:00.000Z" title="Created 2023-11-27 00:00:00">2023-11-27</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/11/15/python%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B01/" title="Python课程笔记(一)"><img src="https://img2.baidu.com/it/u=551125832,420285419&amp;fm=253&amp;fmt=auto&amp;app=138&amp;f=JPEG?w=889&amp;h=500" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Python课程笔记(一)"/></a><div class="content"><a class="title" href="/2023/11/15/python%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B01/" title="Python课程笔记(一)">Python课程笔记(一)</a><time datetime="2023-11-14T16:00:00.000Z" title="Created 2023-11-15 00:00:00">2023-11-15</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2023 - 2024 By wzh</div><div class="footer_custom_text">Hi, welcome to my <a target="_blank" rel="noopener" href="https://butterfly.js.org/">blog</a>!<br>好好生活</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Read Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light And Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Setting"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table Of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back To Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><script>if (!window.MathJax) {
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      tags: 'ams'
+    },
+    chtml: {
+      scale: 1.1
+    },
+    options: {
+      renderActions: {
+        findScript: [10, doc => {
+          for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+            const display = !!node.type.match(/; *mode=display/)
+            const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+            const text = document.createTextNode('')
+            node.parentNode.replaceChild(text, node)
+            math.start = {node: text, delim: '', n: 0}
+            math.end = {node: text, delim: '', n: 0}
+            doc.math.push(math)
+          }
+        }, '']
+      }
+    }
+  }
+  
+  const script = document.createElement('script')
+  script.src = 'https://cdn.jsdelivr.net/npm/mathjax/es5/tex-mml-chtml.min.js'
+  script.id = 'MathJax-script'
+  script.async = true
+  document.head.appendChild(script)
+} else {
+  MathJax.startup.document.state(0)
+  MathJax.texReset()
+  MathJax.typesetPromise()
+}</script></div><div id="landlord"> <div class="message" style="opacity:0"></div> <canvas id="live2d" width="220" height="360" class="live2d"></canvas><div class="hide-button">隐藏</div></div><script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script><script type="text/javascript" src="/live2d-test-demo/live2d/js/message.js"></script><script type="text/javascript" src="/live2d-test-demo/extra_hexo.js"></script><script defer="defer" id="ribbon" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-ribbon.min.js" size="150" alpha="0.6" zIndex="-1" mobile="false" data-click="true"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
