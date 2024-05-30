@@ -1,0 +1,474 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>梯度下降法（二） | wzh's blog</title><meta name="author" content="wzh"><meta name="copyright" content="wzh"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="梯度下降法（二） 在上个笔记中我们举的是一维的例子（假设过原点，只有一个斜率，即参数w，所以损失函数只是一个曲线），那么这里我们先来看一个二维的例子（两个参数，损失函数就是一个二维曲面），来通过这整个流程，加深一下理解。 一、二维例子（预测房价） 例子背景 假设你在做房价预测任务的时候，有以下数据集，其中x代表房屋的面积，y代表房屋的价格：    房屋面积x（平方米） 价格y（千">
+<meta property="og:type" content="article">
+<meta property="og:title" content="梯度下降法（二）">
+<meta property="og:url" content="https://blog.wuzih.top/2024/05/30/%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D%E6%B3%95(%E4%BA%8C)/index.html">
+<meta property="og:site_name" content="wzh&#39;s blog">
+<meta property="og:description" content="梯度下降法（二） 在上个笔记中我们举的是一维的例子（假设过原点，只有一个斜率，即参数w，所以损失函数只是一个曲线），那么这里我们先来看一个二维的例子（两个参数，损失函数就是一个二维曲面），来通过这整个流程，加深一下理解。 一、二维例子（预测房价） 例子背景 假设你在做房价预测任务的时候，有以下数据集，其中x代表房屋的面积，y代表房屋的价格：    房屋面积x（平方米） 价格y（千">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://img2.baidu.com/it/u=551125832,420285419&fm=253&fmt=auto&app=138&f=JPEG?w=889&h=500">
+<meta property="article:published_time" content="2024-05-29T16:00:00.000Z">
+<meta property="article:modified_time" content="2024-05-30T09:21:42.033Z">
+<meta property="article:author" content="wzh">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://img2.baidu.com/it/u=551125832,420285419&fm=253&fmt=auto&app=138&f=JPEG?w=889&h=500"><link rel="shortcut icon" href="/img/avatar.jpg"><link rel="canonical" href="https://blog.wuzih.top/2024/05/30/%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D%E6%B3%95(%E4%BA%8C)/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: {"limitDay":365,"position":"top","messagePrev":"注意，自上次更新已有","messageNext":"天, 若文章里的某些软件和环境涉及大版本更新，一些命令和操作可能会有出入。"},
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: 'Copy Successful',
+    error: 'Copy Error',
+    noSupport: 'Browser Not Supported'
+  },
+  relativeDate: {
+    homepage: true,
+    post: false
+  },
+  runtime: '天',
+  dateSuffix: {
+    just: 'Just now',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: {"limitCount":50,"languages":{"author":"Author: wzh","link":"Link: ","source":"Source: wzh's blog","info":"Copyright is owned by the author. For commercial reprints, please contact the author for authorization. For non-commercial reprints, please indicate the source."}},
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: 'Load More'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: true,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: true
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '梯度下降法（二）',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2024-05-30 17:21:42'
+}</script><script>(win=>{
+      win.saveToLocal = {
+        set: (key, value, ttl) => {
+          if (ttl === 0) return
+          const now = Date.now()
+          const expiry = now + ttl * 86400000
+          const item = {
+            value,
+            expiry
+          }
+          localStorage.setItem(key, JSON.stringify(item))
+        },
+      
+        get: key => {
+          const itemStr = localStorage.getItem(key)
+      
+          if (!itemStr) {
+            return undefined
+          }
+          const item = JSON.parse(itemStr)
+          const now = Date.now()
+      
+          if (now > item.expiry) {
+            localStorage.removeItem(key)
+            return undefined
+          }
+          return item.value
+        }
+      }
+    
+      win.getScript = (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        script.onerror = reject
+        script.onload = script.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          script.onload = script.onreadystatechange = null
+          resolve()
+        }
+
+        Object.keys(attr).forEach(key => {
+          script.setAttribute(key, attr[key])
+        })
+
+        document.head.appendChild(script)
+      })
+    
+      win.getCSS = (url, id = false) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onerror = reject
+        link.onload = link.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          link.onload = link.onreadystatechange = null
+          resolve()
+        }
+        document.head.appendChild(link)
+      })
+    
+      win.activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+          const isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches
+          const isNotSpecified = window.matchMedia('(prefers-color-scheme: no-preference)').matches
+          const hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
+
+          if (t === undefined) {
+            if (isLightMode) activateLightMode()
+            else if (isDarkMode) activateDarkMode()
+            else if (isNotSpecified || hasNoSupport) {
+              const now = new Date()
+              const hour = now.getHours()
+              const isNight = hour <= 6 || hour >= 18
+              isNight ? activateDarkMode() : activateLightMode()
+            }
+            window.matchMedia('(prefers-color-scheme: dark)').addListener(e => {
+              if (saveToLocal.get('theme') === undefined) {
+                e.matches ? activateDarkMode() : activateLightMode()
+              }
+            })
+          } else if (t === 'light') activateLightMode()
+          else activateDarkMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+      const detectApple = () => {
+        if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+          document.documentElement.classList.add('apple')
+        }
+      }
+      detectApple()
+    })(window)</script><script src = "/live2d-test-demo/bundle2.js"></script><link rel="stylesheet" href="/live2d-test-demo/live2d/css/live2d.css" /><script src="https://unpkg.com/core-js-bundle@3.6.1/minified.js"></script><script src="/live2d-test-demo/live2dcubismcore.js"></script><meta name="generator" content="Hexo 6.3.0"></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">Loading...</div></div></div><script>(()=>{
+  const $loadingBox = document.getElementById('loading-box')
+  const $body = document.body
+  const preloader = {
+    endLoading: () => {
+      $body.style.overflow = ''
+      $loadingBox.classList.add('loaded')
+    },
+    initLoading: () => {
+      $body.style.overflow = 'hidden'
+      $loadingBox.classList.remove('loaded')
+    }
+  }
+
+  preloader.initLoading()
+  window.addEventListener('load',() => { preloader.endLoading() })
+
+  if (false) {
+    document.addEventListener('pjax:send', () => { preloader.initLoading() })
+    document.addEventListener('pjax:complete', () => { preloader.endLoading() })
+  }
+})()</script><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/avatar.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">5</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">0</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page group hide" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 列表</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></li><li><a class="site-page child" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></li></ul></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://img2.baidu.com/it/u=551125832,420285419&amp;fm=253&amp;fmt=auto&amp;app=138&amp;f=JPEG?w=889&amp;h=500')"><nav id="nav"><span id="blog-info"><a href="/" title="wzh's blog"><span class="site-name">wzh's blog</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page group hide" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 列表</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></li><li><a class="site-page child" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></li></ul></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">梯度下降法（二）</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2024-05-29T16:00:00.000Z" title="Created 2024-05-30 00:00:00">2024-05-30</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2024-05-30T09:21:42.033Z" title="Updated 2024-05-30 17:21:42">2024-05-30</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="梯度下降法（二）"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post Views:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="梯度下降法二">梯度下降法（二）</h1>
+<p>在上个笔记中我们举的是一维的例子（假设过原点，只有一个斜率，即参数w，所以损失函数只是一个曲线），那么这里我们先来看一个二维的例子（两个参数，损失函数就是一个二维曲面），来通过这整个流程，加深一下理解。</p>
+<h2 id="一二维例子预测房价">一、二维例子（预测房价）</h2>
+<h3 id="例子背景">例子背景</h3>
+<p>假设你在做房价预测任务的时候，有以下数据集，其中x代表房屋的面积，y代表房屋的价格：</p>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: center;">房屋面积x（平方米）</th>
+<th style="text-align: center;">价格y（千美元）</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">50</td>
+<td style="text-align: center;">150</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">60</td>
+<td style="text-align: center;">180</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">70</td>
+<td style="text-align: center;">210</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">80</td>
+<td style="text-align: center;">240</td>
+</tr>
+</tbody>
+</table>
+<p>我们的任务就是希望找到一个线性模型<code>y=wx+b</code>来预测房价。</p>
+<h3 id="初始化参数">初始化参数</h3>
+<p>首先，我们随机初始化参数，假设<code>w=0</code>，<code>b=0</code>，当然也可以设置别的参数。</p>
+<h3 id="定义损失函数">定义损失函数</h3>
+<p>这里我们使用均方误差<code>MSE</code>，作为损失函数，它衡量的是预测值和实际值之间差异的平方的均值，其实在上个笔记的那个一维的例子中，我们也是使用的这个均方误差。（可以按实际需求选择合适的损失函数）
+<span class="math display">\[
+J(w,b)=\frac1n\sum_{i=1}^n(y_i-(wx_i+b))^2
+\]</span>
+这里其实可以看出，这个例子的损失函数是关于w，b两个参数变化的一个二维曲面，而不是之前那个一个参数的曲线，所以这里损失函数的极小值可以想象为在二维曲面的一个<code>山谷点</code>。</p>
+<h3 id="计算梯度">计算梯度</h3>
+<p>梯度是损失函数对<code>每个参数的偏导数</code>，这里有两个参数，所以对于w，b，梯度的计算公式为：</p>
+<ul>
+<li>对w的偏导数： <span
+class="math display">\[\nabla_wJ=\frac{-2}n\sum_{i=1}^nx_i(y_i-(wx_i+b))\]</span></li>
+<li>对b的偏导数： <span
+class="math display">\[\nabla_bJ=\frac{-2}n\sum_{i=1}^n(y_i-(wx_i+b))\]</span></li>
+</ul>
+<p>（从这里其实也可以看出来，之前在笔记一中提到过，有些人在损失函数的定义的时候，把1/n这个系数换成1/2，其实就是在求导的时候方便了计算，虽然不是均方误差，但是方便了计算。具体定义可以根据实际情况来确定损失函数。</p>
+<h3 id="具体计算">具体计算</h3>
+<p>这里我们使用上面表格中具体的数据来进行计算，来把这个流程过一遍：</p>
+<ul>
+<li><p>对w的偏导数： <span
+class="math display">\[\begin{aligned}&amp;\nabla_wJ=\frac{-2}4[(50)(150-(0\cdot50+0))+(60)(180-(0\cdot60+0))+(70)(210-(0\cdot0)\\&amp;70+0))+(80)(240-(0\cdot80+0))]\\&amp;\nabla_wJ=\frac{-2}4[7500+10800+14700+19200]=\frac{-2}4[52200]=-26100\end{aligned}\]</span></p></li>
+<li><p>对b的偏导数： <span
+class="math display">\[\begin{aligned}&amp;\nabla_bJ=\frac{-2}4[(150-0)+(180-0)+(210-0)+(240-0)]\\&amp;\nabla_bJ=\frac{-2}4[780]=-390\end{aligned}\]</span></p></li>
+</ul>
+<h3 id="参数更新">参数更新</h3>
+<p>假设我们选择学习率<code>η=0.0001</code>，然后就可以根据梯度下降的公式来更新参数：
+<span class="math display">\[
+新w=旧w-斜率*\boxed{学习率}        
+\]</span></p>
+<ul>
+<li><p>更新w： <span
+class="math display">\[w=w-\eta\cdot\nabla_wJ=0-0.0001\cdot(-26100)=2.61\]</span></p></li>
+<li><p>更新b： <span
+class="math display">\[b=b-\eta\cdot\nabla_bJ=0-0.0001\cdot(-390)=0.039\]</span></p></li>
+</ul>
+<h3 id="重复迭代">重复迭代</h3>
+<p>重复计算梯度和更新参数的步骤，直到梯度接近零或达到一定的迭代次数，从而使损失函数J最小化。这个过程中，<code>w</code>和<code>b</code>会逐渐调整到能够较好地预测房价的值。通过这个具体计算的二维例子，就可以看到，梯度下降算法通过计算偏导数（即梯度），然后在梯度指向的方向上来调整参数。</p>
+<h3 id="小思考">小思考</h3>
+<p>在梯度计算完成后，更新参数时，为什么都是<code>-</code>指定参数的梯度？</p>
+<p>其实很容易理解，我们先来分析梯度的符号、方向以及如何理解梯度指向损失增长最快的方向：</p>
+<h4 id="1梯度的符号">1、梯度的符号</h4>
+<p>当我们说梯度是损失函数增长最快的方向时，指的是如果你沿梯度正方向移动参数，损失函数的值会增加最快。因此，梯度实际上指向了局部最大点的方向。但在优化问题中，我们通常想要找到损失函数的最小值，这就是为什么我们要沿着梯度的反方向更新参数。
+举个例子：假设某一点的梯度计算结果为正数(例如<span
+class="math inline">\(\frac{\partial J}{\partial
+w}=10\)</span>)。这意味着如果增加<code>w</code>，损失函数<code>J</code>会增加。但我们的目标是减少<code>J</code>，所以我们应该减少<code>w</code>的值。这就是更新公式中存在“减号”的原因：
+<span class="math display">\[
+w=w-\eta\times10
+\]</span> 那如果是负数呢，梯度如果是负数，例如<span
+class="math inline">\(\frac{\partial J}{\partial
+w}=-10\)</span>，这意味着减少<code>w</code>会增加<code>J</code>。因此，为了减少<code>J</code>，我们应该增加<code>w</code>，但是由于梯度是负数，我们使用减法，就相当于增加了<code>w</code>，所以这里依然是使用“减号”：
+<span class="math display">\[
+\begin{gathered}
+w=w-\eta\times(-10) \\
+w=w+\eta\times10
+\end{gathered}
+\]</span> 所以，<strong>不管梯度的符号是什么，“减去 η 乘以梯度”
+这个操作总是让我们向减少损失的方向移动</strong>。</p>
+<h4 id="2梯度的方向">2、梯度的方向</h4>
+<p>由于梯度指向损失增长最快的方向，如果我们想最小化损失，就应该向相反方向移动。这就是为什么更新公式中会减去<code>学习率*梯度</code>，这里学习率控制着我们沿着梯度反方向移动的步长。正确选择学习率是关键。</p>
+<h4
+id="3关于初始值以及sgd更新的理解">3、关于初始值以及SGD更新的理解</h4>
+<p><img
+src="https://cdn.jsdelivr.net/gh/collidepicgo/image/Gradient-Descent-note2/image-20240530150452734.png"
+alt="image-20240530150452734" /></p>
+<p><img
+src="https://cdn.jsdelivr.net/gh/collidepicgo/image/Gradient-Descent-note2/image-20240530150518188.png"
+alt="image-20240530150518188" /></p>
+<p><img
+src="https://cdn.jsdelivr.net/gh/collidepicgo/image/Gradient-Descent-note2/image-20240530150545733.png"
+alt="image-20240530150545733" /></p>
+<p>再观察SGD的这个动态图，就理解了每个样本其实都是“拉动”直线向其靠近：</p>
+<p><img
+src="https://cdn.jsdelivr.net/gh/collidepicgo/image/Gradient-Descent-note2/动画.gif"
+alt="动画" /></p>
+<h2 id="二全局最优和局部最优的理解">二、全局最优和局部最优的理解</h2>
+<p>在前面笔记(一)中我们提到了梯度下降法的基本思想和方法，也介绍了梯度下降法的几个类型，现在我们再来回顾一下并更加深入的理解一下<code>BGD</code>，<code>SGD</code>，<code>MBGD</code>三种方法。</p>
+<p>我们先回答一下上个笔记中遗留下的一些问题：</p>
+<h3 id="1问题一">1、问题一</h3>
+<p>为什么批量梯度下降法BGD可以在凸函数问题中找到全局最优解，而随机梯度下降法SGD和小批量梯度下降法MBGD即使在凸函数中也不一定能找到全局最优解呢？</p>
+<p>其实理论上是这样的，我们知道批量梯度下降<code>BGD</code>是在每次更新参数的时候计算所有样本的，也就是所有样本都参与更新参数的计算中，显然在凸函数问题中，理论上是可以找到全局最优的。但是随机梯度下降<code>SGD</code>呢，它只是在每次更新时用1个样本，这里注意多了“随机”两个字，也就是随机用一个样本来近似我所有的样本，来调整参数，因而随机梯度下降是会带来一定的问题，因为计算得到的并不是准确的一个梯度，这里的不准确指的是，虽然<strong>不是每次</strong>迭代得到的损失函数都向着<strong>全局最优方向</strong>，但是<strong>大的整体的方向</strong>是向<strong>全局最优解</strong>的，最终的结果往往是在<strong>全局最优解附近</strong>。其实在上个笔记那个动图就可以看到，<code>SGD</code>它可能一直在全局最优解附近“振荡”或者说“跳跃”，因为它每次都是随机选一个，所以不保证就一定是全局最优解，所以关键点在这里，并不是说它就不能得到全局最优，只是说因为随机选取一个的原因，导致它可能不是很能稳定收敛下来。</p>
+<p><img
+src="https://cdn.jsdelivr.net/gh/collidepicgo/image/Gradient-Descent-note2/动画.gif"
+alt="动画" /></p>
+<p>所以理解了这个，<strong>其实梯度下降这三个类型的方法，理论上都可以在凸问题中找到全局最优解</strong>，只不过<code>SGD</code>和<code>MBGD</code>由于样本的<strong>随机</strong>和只<strong>选取一部分或一个样本</strong>的原因，导致可能不能在全局最优点稳定的收敛下来，<code>SGD</code>是在全局最优点附近“振荡”，但是相比于批量梯度<code>BGD</code>，这样的方法更快，更快收敛，虽然不是全局最优，但很多时候是我们可以接受的，而且比<code>BGD</code>用的更多。而<code>MBGD</code>呢，在每次更新时用b个样本，其实小批量的梯度下降就是一种折中的方法，他用了一些小样本来近似全部的，其本质就是我1个指不定不太准，那我用个30个50个样本那比随机的要准不少了吧，而且小批量的话还是非常可以反映样本的一个分布情况的。在深度学习中，这种方法用的是最多的，因为这个方法收敛也不会很慢，收敛的局部最优也是更多的可以接受，这里也一样，由于<strong>小批量的样本</strong>和<strong>批次选取的问题</strong>，导致也可能在全局最优附近波动（<code>MBGD</code>是先把数据分批次划分，然后选取批次的时候，这个有人设置成随机选取批次，也有人设置为选取的批次只能选一次，也就是每个批次选取一次），但是相比<code>SGD</code>要稳定很多，离所谓的全局最优也更加接近。</p>
+<p><strong>总的来说，梯度下降法三种：<code>BGD</code>、<code>SGD</code>、<code>MBGD</code>理论上都可以在凸问题中得到全局最优解，只不过后两种<code>SGD</code>和<code>MBGD</code>，它们两由于更新参数时，选取样本的随机性和样本的部分性，导致可能不能在全局最优点稳定的收敛下来，而是在全局最优点附近“振荡”，这只是一个概率问题。（<code>MBGD</code>其实大部分情况已经非常接近全局最优了，速度也快，所以用的最多）</strong></p>
+<p>实际情况中，我们通常很少遇到凸问题，基本都是有多个局部最优，但是<code>MBGD</code>也用的很多，同样的道理，<code>MBGD</code>大部分情况已经非常接近局部最优了，速度收敛也快，所以用的多。<code>SGD</code>在实际情况中还有个优点，就是它的频繁更新可能导致嘈杂梯度，但这也有助于避开局部最小值，找到全局最小值。而在<code>BGD</code>中，虽然这种批量处理提高了精确度，但对于大型训练数据集而言，它仍然需要很长的处理时间，因为仍要将所有数据存储到内存中。<code>BGD</code>算法通常也会产生稳定的误差梯度和收敛性，但有时在寻找局部最小值和全局最小值时，收敛点并不是最理想。而<code>SGD</code>为数据集中的每个示例运行一个训练周期，并一次性更新所有训练示例的参数。
+由于只需保存一个训练示例，所以可以更轻松地将它们存储在内存中。</p>
+<h3 id="2问题二">2、问题二</h3>
+<p>那既然梯度下降通常不能找到全局最优，为什么还应用广泛呢？</p>
+<p>我们知道，梯度下降法只能在凸问题上才能找到全局最优解，但是实际情况中，几乎很少遇到损失函数是一个凸函数，大多数都不是一个凸函数，可能有很多个局部最优解，既然这样，那为什么梯度下降法还很流行呢？其实就一个原因，因为它在实际情况中是好用的。有一个现象存在：这里我们机器学习的最终目标，不是优化算法跑的多准，而是学习的参数在测试集中要表现好。我们训练的数据集并不能代表全部的测试数据，只能是测试数据的一部分代表，并不是百分之百代表，所以我们用梯度下降法本身的目标就不是找全局最优解
+，因为即使找到了全局最优解，它在测试集上也有可能表现的很差，它只是在训练集上表现的非常好，在训练集上的全局最优其实就“相当”于<code>overfit</code>了，也就是过拟合，但其实这里说的有点过于绝对了，所以我打了引号，只是告诉在实际情况中可能根本没必要全局最优。（什么情况不过拟合呢，最好的就是在训练集和测试集上表现一样，但是实际上也是基本不可能表现一模一样的）。该方法应用广泛的另外一个原因就是性能好，收敛速度很快，特别是在测试参数很多而算力又很稀缺的时候。</p>
+<h3 id="3关于鞍点">3、关于鞍点</h3>
+<p>如下图：就像一个马鞍一样，所以称作鞍点：</p>
+<p><img
+src="https://cdn.jsdelivr.net/gh/collidepicgo/image/Gradient-Descent-note2/image-20240526020045957.png"
+alt="image-20240526020045957" /></p>
+<p>鞍点是最优化问题中常遇到的一个现象，鞍点的数学含义是：目标函数在此点的<strong>梯度为0</strong>，但从该点出发的一个方向存在函数极大值点，而另一个方向是函数的极小值点。在高度非凸空间中，存在大量的鞍点，这使得梯度下降法有时会失灵，虽然不是极小值，但是看起来确是收敛的。在实际情况中，几乎不存在找到<strong>鞍点</strong>的可能，除非很碰巧，因为梯度下降是对损失函数每个维度分别求极小值，即分别求<code>J(θ)</code>关于<code>θ1,θ2...θn</code>极小值。例如上图，是一个二维曲面，所以有两个维度（参数），假设为<code>θ1</code>为X方向（维度）的参数，<code>θ2</code>为Y方向（维度）的参数，我们目标就是求<code>J(θ)</code>关于<code>θ1</code>，<code>θ2</code>的极小值，可以看到，在上图这个二维曲面中，鞍点在<code>X方向</code>的梯度为0，在<code>Y方向</code>的梯度也为0，但是鞍点在X方向是极小值，在Y方向是极大值。所以说除非在更新<code>θ1</code>的时候，<code>θ1</code>收敛到梯度为0的时候，<code>θ2</code>也恰好在处在梯度为0的地方，才可能收敛到鞍点（停止更新），不然如果<code>θ1</code>收敛到梯度为0的时候，<code>θ2</code>不在梯度为0的地方的话，即使<code>θ1</code>收敛到极小值，<code>θ2</code>还是会继续更新的（没有停止更新），因为在鞍点在<code>θ2</code>这个参数（维度）中是极大值。</p>
+<p><strong>也就是说，在更新参数的时候，<code>θ1</code>（代表X方向）是朝着极小值更新的，最终收敛到X方向的极小值，而<code>θ2</code>（代表Y方向）也是朝着极小值更新的，最终收敛到Y方向的极小值，但是对于上图中的鞍点，在Y方向确是极大值，所以要想收敛到鞍点，显而易见只有当X方向收敛到极小值的同时，Y方向“处在”最大值，（注意用词，这里没有说收敛到极大值，因为我们是收敛到极小值。）只有这种情况下，X方向和Y方向，也就是<code>θ1</code>和<code>θ2</code>由于梯度为0，导致停止迭代更新，从而”收敛“或者说”找到“到鞍点，只要<code>θ2</code>在<code>θ1</code>收敛到最小值的同时，不处在极大值，那么<code>θ2</code>由于会继续向梯度减小的方向迭代更新，就会离鞍点越来越远，就不会到达或者说“收敛”到鞍点了</strong></p>
+<p>所以说找到鞍点的很碰巧，因为在高度非凸空间中，虽然可能存在大量鞍点，但要想找到鞍点，必须所有参数的梯度为0，这种情况只有极小概率，但是有没有可能确实收敛到鞍点了呢，毕竟极小概率事件也不能绝对不发生，所以我们在之前笔记提到过，在梯度下降的算法调优中，我们需要多次用不同初始值运行算法，这样也有效避免了该问题。</p>
+<h3 id="4参考文章中提到的一些问题">4、参考文章中提到的一些问题</h3>
+<p>这里把一个知乎上<a
+target="_blank" rel="noopener" href="https://www.zhihu.com/question/264189719/answer/291167114">文章</a>中提到的一些问题拿出来整理一下，虽然有的还有点还不太明白，最优化问题，凸问题是一个很复杂，数学理论很多的问题，甚至有专门的一本书来说关于凸问题的一些理论和数学证明，所以这里我们还没深入学习，只是有目前的一些理解来加深梯度下降算法。</p>
+<p><strong>收敛性，能收敛吗？收敛到什么地方？</strong></p>
+<p>对于收敛性的问题，知乎上就有这个问题：<a
+target="_blank" rel="noopener" href="https://www.zhihu.com/question/27012077">为什么随机梯度下降方法能够收敛？</a>，我比较赞赏<a
+target="_blank" rel="noopener" href="https://www.zhihu.com/question/27012077/answer/122359602">李文哲博士的回答</a>（推荐一看），总的来说就是从expected
+loss用特卡洛（monte carlo）来表示计算，那batch GD, mini-batch GD,
+SGD都可以看成SGD的范畴。因为大家都是在一个真实的分布中得到的样本，对于分布的拟合都是近似的。那这个时候三种方式的梯度下降就都是可以看成用样本来<a
+target="_blank" rel="noopener" href="https://www.zhihu.com/search?q=近似分布&amp;search_source=Entity&amp;hybrid_search_source=Entity&amp;hybrid_search_extra={&quot;sourceType&quot;%3A&quot;answer&quot;%2C&quot;sourceId&quot;%3A291167114}">近似分布</a>的过程，都是可以收敛的！</p>
+<p><strong>对于收敛到什么地方：</strong></p>
+<p>能到的地方：最小值，极小值，鞍点。这些都是能收敛到的地方，也就是梯度为0的点。</p>
+<p>当然，几乎不存在找到<strong>鞍点</strong>的可能，除非很碰巧，因为梯度下降是对损失函数每个维度分别求极小值，即分别求<code>J(θ)</code>关于<code>θ1,θ2...θn</code>极小值。</p>
+<p>然后是最小值和极小值，如果是凸函数，梯度下降会收敛到最小值，因为只有一个极小值，它就是最小值。</p>
+<h2 id="三bgdsgdmbgd的伪代码">三、BGD、SGD、MBGD的伪代码</h2>
+<p>这里只是解释一下后面三个算法代码中的<code>x</code>，<code>y</code>是什么：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line">x=<span class="number">2</span>* np.random.rand(<span class="number">100</span>,<span class="number">1</span>)		<span class="comment">#生成训练数据(特征部分)</span></span><br><span class="line">y=<span class="number">4</span>+<span class="number">3</span>*x+np.random.randn(<span class="number">100</span>,<span class="number">1</span>)		<span class="comment">#生成训练数据(标签部分)</span></span><br></pre></td></tr></table></figure>
+
+<p><img
+src="https://cdn.jsdelivr.net/gh/collidepicgo/image/Gradient-Descent-note2/image-20240528021638617.png"
+alt="image-20240528021638617" /></p>
+<h3 id="批量梯度下降bgd">批量梯度下降BGD</h3>
+<p>关键点在于计算梯度的式子，注意，虽然BGD是每一次迭代计算所有的样本，但实际上，我们可以把样本全部放在一个矩阵里，然后运用矩阵乘法和矩阵转置等运算，就可以一次性用所有的样本求梯度。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">m = <span class="built_in">len</span>(x_b)  <span class="comment"># 样本数量</span></span><br><span class="line">n_iterations = <span class="number">1000</span>  <span class="comment"># 迭代次数</span></span><br><span class="line">theta = np.random.randn(<span class="number">2</span>, <span class="number">1</span>)  <span class="comment"># 随机初始化参数</span></span><br><span class="line">eta = <span class="number">0.1</span>  <span class="comment"># 学习率</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> iteration <span class="keyword">in</span> <span class="built_in">range</span>(n_iterations):</span><br><span class="line">    gradients = <span class="number">2</span> / m * x_b.T.dot(x_b.dot(theta) - y)  <span class="comment"># 使用所有样本计算梯度</span></span><br><span class="line">    theta = theta - eta * gradients  <span class="comment"># 更新参数</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="随机梯度下降sgd">随机梯度下降SGD</h3>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">m = <span class="built_in">len</span>(x_b)  <span class="comment"># 样本数量</span></span><br><span class="line">n_epochs = <span class="number">50</span>  <span class="comment"># 迭代周期数</span></span><br><span class="line">theta = np.random.randn(<span class="number">2</span>, <span class="number">1</span>)  <span class="comment"># 随机初始化参数</span></span><br><span class="line">eta = <span class="number">0.1</span>  <span class="comment"># 学习率</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> epoch <span class="keyword">in</span> <span class="built_in">range</span>(n_epochs):</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(m):  <span class="comment"># 在每个迭代周期中进行m次运算</span></span><br><span class="line">        random_index = np.random.randint(m)  <span class="comment"># 随机选择一个样本</span></span><br><span class="line">        xi = x_b[random_index:random_index + <span class="number">1</span>]</span><br><span class="line">        yi = y[random_index:random_index + <span class="number">1</span>]</span><br><span class="line">        gradients = <span class="number">2</span> * xi.T.dot(xi.dot(theta) - yi)  <span class="comment"># 计算该样本的梯度</span></span><br><span class="line">        theta = theta - eta * gradients  <span class="comment"># 更新参数</span></span><br></pre></td></tr></table></figure>
+
+<p>这里需要强调和说明的是，我们在前面理论中，说SGD是每次迭代，都是随机使用一个样本来计算梯度，
+然后更新参数，但实际上，在下面代码里，你会发现一个问题，就是每一次迭代内部还有一个循环，既然SGD是每次迭代使用一个随机样本来计算梯度，为什么还有一个内层循环呢，直接随机选一个样本计算不就可以吗，为什么要用这个内层循环？我们先来分析这个内层循环的代码做了什么事：</p>
+<p>可以看到就是随机从样本集中选取<code>xi</code>，<code>yi</code>这个样本，然后直接用这个样本计算梯度，并更新参数，而这就已经完成了我们前面说的SGD的一个迭代所做的事，而这个内层循环<code>for i in range(m)</code>是把这个事循环执行了m次（m也就是全部样本数）。其实这里我们能更加深入的理解SGD这个算法。</p>
+<p>虽然每次运算只使用一个随机选取的样本来更新参数，但通过 <code>m</code>
+次运算可以确保在一个迭代周期（epoch）内，所有样本都至少有机会被选中进行一次参数更新。这就是
+SGD
+的特性：逐样本更新参数，并通过多次迭代周期来覆盖整个训练集。在每个迭代周期内，重复上述过程
+<code>m</code>
+次，确保所有样本都有机会影响参数更新。通过这种方式，虽然每次参数更新只使用一个随机样本，但在每个迭代周期内进行
+<code>m</code>
+次运算可以确保所有样本在多次迭代周期内都对模型参数产生影响。这种逐样本更新参数的方法有助于提高模型的收敛速度，同时增加了更新过程的随机性，有助于跳出局部最优解。</p>
+<p>我们试想一下，如果就按一层循环，也就是一个迭代周期里，只是随机用一个样本来计算梯度，由于随机性的原因，拟合的直线会不会跳来跳去，或者也有可能，本来可能拟合的不错，然后由于最后几次迭代，选取的样本都是边缘的样本（也就是远离密集中心的），导致拟合的直线又偏离了最优的地方（虽然有学习率，也就是步长，导致每一次更新参数步子不会迈的很大），而且一般样本数量是远大于迭代次数的，比如样本数量有10000个，而迭代次数我们设置100或者1000次，当然这只是举例，迭代次数你也可以设置成10000次，但是我们这里强调的是，样本数量一般是比迭代次数大的，那么在这种情况下，如果每次迭代只选一个随机样本来进行计算，并更新参数的话，那我们迭代完成之后，都没有把样本遍历一边，10000个样本，迭代100次，我们只用了其中随机的100个样本，那这样的效果显然是非常差的。所以这里使用这个内层循环的意义就在于：</p>
+<ol type="1">
+<li><strong>全面覆盖训练集</strong>: 通过在每个 epoch
+中遍历所有样本，确保每个样本在每个迭代中都能影响参数更新。这样可以确保在每个
+epoch 中所有样本都对参数更新有贡献。</li>
+<li>遍历所有样本的主要目的是确保在<strong>每个迭代周期中，所有样本都对模型参数的更新有贡献</strong>。通过这种方式，模型能够更全面地学习训练数据中的模式。虽然每次更新只用到了一个样本，但通过多次迭代周期，模型能够逐渐收敛到较优的参数值。</li>
+<li>虽然在每个迭代周期中我们遍历了所有样本，但实际<strong>每次参数更新</strong>只使用一个随机选取的样本。这种方式确保了每个样本在多个迭代周期中都能影响参数更新，从而提高模型的收敛性和鲁棒性。内层循环的作用是遍历所有样本，确保每个样本都能在每个迭代周期中至少被选中一次进行参数更新。</li>
+</ol>
+<p>另外，可以发现，其实BGD和SGD在一个循环周期似乎做了同样次数的计算，BGD是一次性计算所有样本（通过矩阵乘法），而SGD虽然每次都只是计算一个样本，但它每个循环周期内都循环了m次（样本数），那这样相当于是，BGD是一次计算100次，SGD是一次计算1次，但是循环100次，那么为什么SGD更快呢？（因为看起来计算量是一样的，而且SGD还是分开算的）</p>
+<p>下面的回答供参考：</p>
+<ol type="1">
+<li><strong>每次更新计算量小</strong>：
+<ul>
+<li>在 SGD
+中，每次更新参数只需要计算一个样本的梯度。虽然总的计算量（一个周期内的所有样本）和
+BGD 相同，但每次计算的规模要小得多，因此每次更新的速度更快。</li>
+</ul></li>
+<li><strong>更快的迭代周期</strong>：
+<ul>
+<li>由于每次更新的计算量小，SGD
+可以进行更多的迭代周期，在相同时间内进行更多次参数更新，从而更快地逼近最优解。</li>
+</ul></li>
+<li><strong>在线更新和实时学习</strong>：
+<ul>
+<li>SGD
+可以实现在线更新，即每收到一个新的数据点就可以更新模型参数。这使得 SGD
+特别适用于实时数据和流数据场景。</li>
+</ul></li>
+</ol>
+<p>SGD
+的这些特性使得它在处理大规模数据时更具优势，特别是当计算资源有限或需要实时学习时。而对比BGD，BGD对于大规模数据集，计算整个训练集的梯度会非常耗时。</p>
+<p><strong>总结</strong></p>
+<ul>
+<li><strong>BGD</strong>：在每个迭代周期中计算所有样本的梯度，然后更新参数一次。每次计算量大，但更新稳定。</li>
+<li><strong>SGD</strong>：在每个迭代周期中，逐个样本计算梯度并更新参数。每次计算量小，但更新频繁且带有随机性。</li>
+</ul>
+<p>这种理解方式帮助我们认识到 SGD 尽管在每个迭代周期内计算了
+<code>m</code>
+次，但由于每次计算的规模小，整体效率更高，尤其在处理大规模数据集时更具优势。</p>
+<h3 id="小批量梯度下降mbgd">小批量梯度下降MBGD</h3>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">n_iterations = <span class="number">50</span>  <span class="comment"># 总共进行50个epoch</span></span><br><span class="line">minibatch_size = <span class="number">20</span>  <span class="comment"># 每个小批量的大小</span></span><br><span class="line">theta=np.random.randn(<span class="number">2</span>,<span class="number">1</span>)  <span class="comment"># 随机初始化参数</span></span><br><span class="line">m = <span class="number">100</span>  <span class="comment"># 样本总数</span></span><br><span class="line">eta = <span class="number">0.1</span>  <span class="comment"># 学习率</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> epoch <span class="keyword">in</span> <span class="built_in">range</span>(n_iterations):  <span class="comment"># 进行50个epoch的训练</span></span><br><span class="line">    shuffled_indices = np.random.permutation(m)  <span class="comment"># 打乱索引</span></span><br><span class="line">    x_b_shuffled = x_b[shuffled_indices]  <span class="comment"># 打乱后的训练数据</span></span><br><span class="line">    y_shuffled = y[shuffled_indices]  <span class="comment"># 打乱后的标签</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">0</span>, m, minibatch_size):  <span class="comment"># 遍历整个数据集，步长为20</span></span><br><span class="line">        xi = x_b_shuffled[i:i + minibatch_size]  <span class="comment"># 取出一个小批量的样本</span></span><br><span class="line">        yi = y_shuffled[i:i + minibatch_size]  <span class="comment"># 取出对应的小批量标签</span></span><br><span class="line">        gradients = <span class="number">2</span> / minibatch_size * xi.T.dot(xi.dot(theta) - yi)  <span class="comment"># 计算小批量梯度</span></span><br><span class="line">        theta = theta - eta * gradients  <span class="comment"># 更新参数</span></span><br><span class="line">        theta_path_mgd.append(theta)  <span class="comment"># 保存参数路径</span></span><br></pre></td></tr></table></figure>
+
+<p>这里可以看到对于MBGD也是有一个内层循环，和SGD是一样的逻辑，只不过这里是循环“批次个数”遍。如果没有内层循环，也就是如果每个
+epoch
+只使用一个小批量的数据，那么大部分数据都不会被用到，模型的训练效果会非常差。其实和SGD是一样的逻辑。SGD可以看成是1个小批次里只有1个样本（<code>minibatch_size = 1</code>）。</p>
+<p>这里说一下MBGD的内层循环的逻辑：<code>for i in range(0, m, minibatch_size)</code></p>
+<p>假设你有一个数据集，有 <code>100</code>
+个样本，<code>minibatch_size = 20</code>也就是一个小批次有<code>20</code>个样本，那么批次数就是<code>5</code>。</p>
+<p><code>range(0, m, minibatch_size)</code>的意思是，从<code>0</code>到<code>m-1</code>，步长是<code>minibatch_size</code>，也就是<code>20</code>，即内层循环要循环5次，<code>i</code>每次循环分别取：<code>0，20，40，60，80</code></p>
+<p>那么刚开始<code>i=0</code>时，下面两行代码取的是，<code>0~19</code>号样本，做为一个小批次，然后计算梯度，更新参数。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">xi = x_b_shuffled[i:i + minibatch_size]  <span class="comment"># 取出一个小批量的样本</span></span><br><span class="line">yi = y_shuffled[i:i + minibatch_size]  <span class="comment"># 取出对应的小批量标签</span></span><br></pre></td></tr></table></figure>
+
+<p>循环完了之后呢，<code>i=20</code>，然后就是取<code>20~29</code>号样本，做为一个小批次，然后计算梯度，更新参数，之后就是<code>i=40</code>，取<code>40~59</code>，就这样一直分组计算……..直到把所有样本按批次计算一遍。这样一次迭代（外部循环epoch）就完成了，和SGB一样，也是一个迭代周期把所有样本计算了一遍，只不过这个是分组，然后按批次，一批批计算，说白了，SGD可以看成一个批次里只有一个样本（<code>minibatch_size = 1</code>）</p>
+<p>内层循环执行<code>5</code>次，<code>5</code>个批次全部计算一遍，更新一遍参数，这样一次迭代（外部循环epoch）就完成了，然后再执行下一次迭代（外部循环epoch），下一次迭代再重新打乱一下样本的顺序号，然后再分<code>0~19</code>，<code>20~39</code>，<code>40~59</code>…</p>
+<p>参考：</p>
+<p><a
+target="_blank" rel="noopener" href="https://www.zhihu.com/question/264189719/answer/291167114">如何理解随机梯度下降（stochastic
+gradient descent，SGD）？ - 知乎 (zhihu.com)</a></p>
+<p><a
+target="_blank" rel="noopener" href="https://www.zhihu.com/question/57747902/answer/3464786510">梯度下降的参数更新公式是如何确定的？
+- 知乎 (zhihu.com)</a></p>
+<p><a
+target="_blank" rel="noopener" href="https://www.cnblogs.com/Christina-Notebook/p/10111516.html">最优化问题——梯度下降法
+- Christina_笔记 - 博客园 (cnblogs.com)</a></p>
+<p><a
+target="_blank" rel="noopener" href="https://blog.csdn.net/No_Game_No_Life_/article/details/89844430">One
+PUNCH
+Man——梯度下降和全局最优_梯度下降法如何寻找全局最优解-CSDN博客</a></p>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/113714840">什么是梯度下降 -
+知乎 (zhihu.com)</a></p>
+<p><a
+target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/90523799">梯度下降三种方法的代码展示
+- 知乎 (zhihu.com)</a></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://blog.wuzih.top">wzh</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://blog.wuzih.top/2024/05/30/%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D%E6%B3%95(%E4%BA%8C)/">https://blog.wuzih.top/2024/05/30/%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D%E6%B3%95(%E4%BA%8C)/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，文章版权均归wzh所有，转载请注明来自 <a href="https://blog.wuzih.top" target="_blank">wzh's blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"></div><div class="post_share"><div class="social-share" data-image="https://img2.baidu.com/it/u=551125832,420285419&amp;fm=253&amp;fmt=auto&amp;app=138&amp;f=JPEG?w=889&amp;h=500" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-full"><a href="/2024/05/19/%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D%E6%B3%95(%E4%B8%80)/" title="梯度下降法（一）"><img class="cover" src="https://img2.baidu.com/it/u=551125832,420285419&amp;fm=253&amp;fmt=auto&amp;app=138&amp;f=JPEG?w=889&amp;h=500" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">Previous</div><div class="prev_info">梯度下降法（一）</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">wzh</div><div class="author-info__description">记录学习生活，欢迎访问！</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">5</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">0</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/wuzi0/wzh-blog"><i class="fab fa-github"></i><span>关注</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/wuzi0/wzh-blog" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="https://mail.qq.com/" target="_blank" title="Email:secret@qq.com"><i class="fas fa-envelope" style="color: #24292e;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">不定时更新</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Contents</span><span class="toc-percentage"></span></div><div class="toc-content is-expand"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D%E6%B3%95%E4%BA%8C"><span class="toc-text">梯度下降法（二）</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E4%BA%8C%E7%BB%B4%E4%BE%8B%E5%AD%90%E9%A2%84%E6%B5%8B%E6%88%BF%E4%BB%B7"><span class="toc-text">一、二维例子（预测房价）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BE%8B%E5%AD%90%E8%83%8C%E6%99%AF"><span class="toc-text">例子背景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%9D%E5%A7%8B%E5%8C%96%E5%8F%82%E6%95%B0"><span class="toc-text">初始化参数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9A%E4%B9%89%E6%8D%9F%E5%A4%B1%E5%87%BD%E6%95%B0"><span class="toc-text">定义损失函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AE%A1%E7%AE%97%E6%A2%AF%E5%BA%A6"><span class="toc-text">计算梯度</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%B7%E4%BD%93%E8%AE%A1%E7%AE%97"><span class="toc-text">具体计算</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%82%E6%95%B0%E6%9B%B4%E6%96%B0"><span class="toc-text">参数更新</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%87%8D%E5%A4%8D%E8%BF%AD%E4%BB%A3"><span class="toc-text">重复迭代</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B0%8F%E6%80%9D%E8%80%83"><span class="toc-text">小思考</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1%E6%A2%AF%E5%BA%A6%E7%9A%84%E7%AC%A6%E5%8F%B7"><span class="toc-text">1、梯度的符号</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2%E6%A2%AF%E5%BA%A6%E7%9A%84%E6%96%B9%E5%90%91"><span class="toc-text">2、梯度的方向</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3%E5%85%B3%E4%BA%8E%E5%88%9D%E5%A7%8B%E5%80%BC%E4%BB%A5%E5%8F%8Asgd%E6%9B%B4%E6%96%B0%E7%9A%84%E7%90%86%E8%A7%A3"><span class="toc-text">3、关于初始值以及SGD更新的理解</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E5%85%A8%E5%B1%80%E6%9C%80%E4%BC%98%E5%92%8C%E5%B1%80%E9%83%A8%E6%9C%80%E4%BC%98%E7%9A%84%E7%90%86%E8%A7%A3"><span class="toc-text">二、全局最优和局部最优的理解</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E9%97%AE%E9%A2%98%E4%B8%80"><span class="toc-text">1、问题一</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%E9%97%AE%E9%A2%98%E4%BA%8C"><span class="toc-text">2、问题二</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3%E5%85%B3%E4%BA%8E%E9%9E%8D%E7%82%B9"><span class="toc-text">3、关于鞍点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4%E5%8F%82%E8%80%83%E6%96%87%E7%AB%A0%E4%B8%AD%E6%8F%90%E5%88%B0%E7%9A%84%E4%B8%80%E4%BA%9B%E9%97%AE%E9%A2%98"><span class="toc-text">4、参考文章中提到的一些问题</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89bgdsgdmbgd%E7%9A%84%E4%BC%AA%E4%BB%A3%E7%A0%81"><span class="toc-text">三、BGD、SGD、MBGD的伪代码</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%89%B9%E9%87%8F%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8Dbgd"><span class="toc-text">批量梯度下降BGD</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%9A%8F%E6%9C%BA%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8Dsgd"><span class="toc-text">随机梯度下降SGD</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B0%8F%E6%89%B9%E9%87%8F%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8Dmbgd"><span class="toc-text">小批量梯度下降MBGD</span></a></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最近文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2024/05/30/%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D%E6%B3%95(%E4%BA%8C)/" title="梯度下降法（二）"><img src="https://img2.baidu.com/it/u=551125832,420285419&amp;fm=253&amp;fmt=auto&amp;app=138&amp;f=JPEG?w=889&amp;h=500" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="梯度下降法（二）"/></a><div class="content"><a class="title" href="/2024/05/30/%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D%E6%B3%95(%E4%BA%8C)/" title="梯度下降法（二）">梯度下降法（二）</a><time datetime="2024-05-29T16:00:00.000Z" title="Created 2024-05-30 00:00:00">2024-05-30</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/05/19/%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D%E6%B3%95(%E4%B8%80)/" title="梯度下降法（一）"><img src="https://img2.baidu.com/it/u=551125832,420285419&amp;fm=253&amp;fmt=auto&amp;app=138&amp;f=JPEG?w=889&amp;h=500" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="梯度下降法（一）"/></a><div class="content"><a class="title" href="/2024/05/19/%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D%E6%B3%95(%E4%B8%80)/" title="梯度下降法（一）">梯度下降法（一）</a><time datetime="2024-05-18T16:00:00.000Z" title="Created 2024-05-19 00:00:00">2024-05-19</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/12/25/%E5%B9%BF%E6%92%AD%E5%AE%9E%E9%AA%8C/" title="广播网络实验"><img src="https://img2.baidu.com/it/u=551125832,420285419&amp;fm=253&amp;fmt=auto&amp;app=138&amp;f=JPEG?w=889&amp;h=500" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="广播网络实验"/></a><div class="content"><a class="title" href="/2023/12/25/%E5%B9%BF%E6%92%AD%E5%AE%9E%E9%AA%8C/" title="广播网络实验">广播网络实验</a><time datetime="2023-12-24T16:00:00.000Z" title="Created 2023-12-25 00:00:00">2023-12-25</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/11/27/python%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B02/" title="Python课程笔记(二)"><img src="https://img2.baidu.com/it/u=551125832,420285419&amp;fm=253&amp;fmt=auto&amp;app=138&amp;f=JPEG?w=889&amp;h=500" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Python课程笔记(二)"/></a><div class="content"><a class="title" href="/2023/11/27/python%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B02/" title="Python课程笔记(二)">Python课程笔记(二)</a><time datetime="2023-11-26T16:00:00.000Z" title="Created 2023-11-27 00:00:00">2023-11-27</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/11/15/python%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B01/" title="Python课程笔记(一)"><img src="https://img2.baidu.com/it/u=551125832,420285419&amp;fm=253&amp;fmt=auto&amp;app=138&amp;f=JPEG?w=889&amp;h=500" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Python课程笔记(一)"/></a><div class="content"><a class="title" href="/2023/11/15/python%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B01/" title="Python课程笔记(一)">Python课程笔记(一)</a><time datetime="2023-11-14T16:00:00.000Z" title="Created 2023-11-15 00:00:00">2023-11-15</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2023 - 2024 By wzh</div><div class="footer_custom_text">Hi, welcome to my <a target="_blank" rel="noopener" href="https://butterfly.js.org/">blog</a>!<br>好好生活</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Read Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light And Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Setting"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table Of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back To Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><script>if (!window.MathJax) {
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      tags: 'ams'
+    },
+    chtml: {
+      scale: 1.1
+    },
+    options: {
+      renderActions: {
+        findScript: [10, doc => {
+          for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+            const display = !!node.type.match(/; *mode=display/)
+            const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+            const text = document.createTextNode('')
+            node.parentNode.replaceChild(text, node)
+            math.start = {node: text, delim: '', n: 0}
+            math.end = {node: text, delim: '', n: 0}
+            doc.math.push(math)
+          }
+        }, '']
+      }
+    }
+  }
+  
+  const script = document.createElement('script')
+  script.src = 'https://cdn.jsdelivr.net/npm/mathjax/es5/tex-mml-chtml.min.js'
+  script.id = 'MathJax-script'
+  script.async = true
+  document.head.appendChild(script)
+} else {
+  MathJax.startup.document.state(0)
+  MathJax.texReset()
+  MathJax.typesetPromise()
+}</script></div><div id="landlord"> <div class="message" style="opacity:0"></div> <canvas id="live2d" width="220" height="360" class="live2d"></canvas><div class="hide-button">隐藏</div></div><script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script><script type="text/javascript" src="/live2d-test-demo/live2d/js/message.js"></script><script type="text/javascript" src="/live2d-test-demo/extra_hexo.js"></script><script defer="defer" id="ribbon" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-ribbon.min.js" size="150" alpha="0.6" zIndex="-1" mobile="false" data-click="true"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
