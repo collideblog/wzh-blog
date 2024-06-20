@@ -318,10 +318,10 @@ darkmode:
   # autoChangeMode: 1  Following System Settings, if the system doesn't support dark mode, it will switch dark mode between 6 pm to 6 am
   # autoChangeMode: 2  Switch dark mode between 6 pm to 6 am
   # autoChangeMode: false
-  autoChangeMode: 1
+  autoChangeMode: 2
   # Set the light mode time. The value is between 0 and 24. If not set, the default value is 6 and 18
-  start: # 8
-  end: # 20
+  start: 7
+  end: 20
 
 # show scroll percent in scroll-to-top button
 rightside_scroll_percent: false
@@ -910,7 +910,10 @@ css_prefix: true
 # 插入代码到头部 </head> 之前 和 底部 </body> 之前
 inject:
   head:
-    # - <link rel="stylesheet" href="/xxx.css">
+    # 下面这一行JQuery本来是用于鼠标粒子特效的，但是注意bottom后面也有一个JQuery，所以这个JQuery版本不知道会不会被下面的那个覆盖掉，还是说都引用了，
+    # 总之，鼠标粒子特效要在最后一个JQuery的下面，如果放在bottom的最开始两行，浏览器控制台是会报错的，不生效。
+    - <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
     # 下面两行是用于MathJax配置的
     # - <script defer src="/js/mathjax_config.js"></script>
     # - <script type="text/javascript" id="MathJax-script" defer src="https://unpkg.com/mathjax@3/es5/tex-chtml.js"></script>
@@ -932,6 +935,14 @@ inject:
     - <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
     - <script type="text/javascript" src="/live2d-test-demo/live2d/js/message.js"></script>
     - <script type="text/javascript" src="/live2d-test-demo/extra_hexo.js"></script>
+    
+    # 下面两个是用于鼠标粒子特效的，注意：下面两个有先后顺序，mouse_custom.js文件里的shuicheMouse方法是mouse.min.js里定义的，所以min.js在前
+    # 同时注意，mouse.min.js用到了JQuery，一般是在head要引用JQuery，但是由于live2d在bottom也引用了JQuery，所以下面两行要在bottom的JQuery下面
+    # 如果在bottom的JQuery上面，可能因为bottom的JQuery把上面的head里的Jquery覆盖了，所以浏览器网页控制台报错显示下面鼠标粒子特效没有Jquery
+    - <script src="/js/mouse.min.js"></script>
+    - <script type="text/javascript" src="/js/mouse_custom.js"></script>
+
+
 
 
 

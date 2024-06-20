@@ -48,7 +48,7 @@
     toc: true,
     rightside: false,
   },
-  autoDarkmode: true
+  autoDarkmode: false
 }</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
   title: '广播网络实验',
   isPost: true,
@@ -134,26 +134,11 @@
       }
       const t = saveToLocal.get('theme')
     
-          const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
-          const isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches
-          const isNotSpecified = window.matchMedia('(prefers-color-scheme: no-preference)').matches
-          const hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
-
-          if (t === undefined) {
-            if (isLightMode) activateLightMode()
-            else if (isDarkMode) activateDarkMode()
-            else if (isNotSpecified || hasNoSupport) {
-              const now = new Date()
-              const hour = now.getHours()
-              const isNight = hour <= 6 || hour >= 18
-              isNight ? activateDarkMode() : activateLightMode()
-            }
-            window.matchMedia('(prefers-color-scheme: dark)').addListener(e => {
-              if (saveToLocal.get('theme') === undefined) {
-                e.matches ? activateDarkMode() : activateLightMode()
-              }
-            })
-          } else if (t === 'light') activateLightMode()
+          const now = new Date()
+          const hour = now.getHours()
+          const isNight = hour <= 7 || hour >= 20
+          if (t === undefined) isNight ? activateDarkMode() : activateLightMode()
+          else if (t === 'light') activateLightMode()
           else activateDarkMode()
         
       const asideStatus = saveToLocal.get('aside-status')
@@ -171,7 +156,7 @@
         }
       }
       detectApple()
-    })(window)</script><script src = "/live2d-test-demo/bundle2.js"></script><link rel="stylesheet" href="/live2d-test-demo/live2d/css/live2d.css" /><script src="https://unpkg.com/core-js-bundle@3.6.1/minified.js"></script><script src="/live2d-test-demo/live2dcubismcore.js"></script><meta name="generator" content="Hexo 6.3.0"></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">Loading...</div></div></div><script>(()=>{
+    })(window)</script><script src="https://code.jquery.com/jquery-3.6.0.min.js"></script><script src = "/live2d-test-demo/bundle2.js"></script><link rel="stylesheet" href="/live2d-test-demo/live2d/css/live2d.css" /><script src="https://unpkg.com/core-js-bundle@3.6.1/minified.js"></script><script src="/live2d-test-demo/live2dcubismcore.js"></script><meta name="generator" content="Hexo 6.3.0"></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">Loading...</div></div></div><script>(()=>{
   const $loadingBox = document.getElementById('loading-box')
   const $body = document.body
   const preloader = {
@@ -406,4 +391,4 @@ alt="img" /></p>
   MathJax.startup.document.state(0)
   MathJax.texReset()
   MathJax.typesetPromise()
-}</script></div><div id="landlord"> <div class="message" style="opacity:0"></div> <canvas id="live2d" width="220" height="360" class="live2d"></canvas><div class="hide-button">隐藏</div></div><script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script><script type="text/javascript" src="/live2d-test-demo/live2d/js/message.js"></script><script type="text/javascript" src="/live2d-test-demo/extra_hexo.js"></script><script defer="defer" id="ribbon" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-ribbon.min.js" size="150" alpha="0.6" zIndex="-1" mobile="false" data-click="true"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
+}</script></div><div id="landlord"> <div class="message" style="opacity:0"></div> <canvas id="live2d" width="220" height="360" class="live2d"></canvas><div class="hide-button">隐藏</div></div><script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script><script type="text/javascript" src="/live2d-test-demo/live2d/js/message.js"></script><script type="text/javascript" src="/live2d-test-demo/extra_hexo.js"></script><script src="/js/mouse.min.js"></script><script type="text/javascript" src="/js/mouse_custom.js"></script><script defer="defer" id="ribbon" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-ribbon.min.js" size="150" alpha="0.6" zIndex="-1" mobile="false" data-click="true"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

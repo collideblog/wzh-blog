@@ -99,3 +99,7 @@ bug：这里对于`_config.butterfly`配置项里的`inject`里的`head`标签�
 
 更换了pandoc作为博客渲染引擎，即就是安装了`hexo-renderer-pandoc`插件，支持数学公式的渲染了。
 创建了`/source/js`文件夹，用于存放后续js相关代码，这次创建了一个`mathjax_config.js`文件来存放mathjax的相关配置，可以在`_config.butterfly.yml`文件里的`inject`字段进行引用，但是这里我虽然创建了`mathjax_config.js`文件，但没有引用，后续要引用即可在`inject`字段里添加引用这个js代码，但是要记得搭配jsdelivr或unpkg等CDN引用(已写好)。
+
+### **butterfly-config-v1.8**
+
+添加了鼠标粒子跟随特效，在`source/js`目录里添加了`mouse_custom.js`和`mouse.min.js`两个文件，然后在`_config.butterfly.yml`文件里的`inject`字段添加相关引用。
